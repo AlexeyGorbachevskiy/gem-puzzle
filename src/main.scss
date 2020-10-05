@@ -1,5 +1,8 @@
 @import "~normalize.css";
 
+//$main-color: #e9e0c0;
+$main-color: #ddd5bc;
+$puzzle-color: #85aa53;
 
 * {
   margin: 0;
@@ -7,9 +10,59 @@
   box-sizing: border-box;
 }
 
-.main-wrapper {
+body {
+  background: url("assets/images/boards.jpg") center center no-repeat;
+  background-size: cover;
   width: 100vw;
   height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .container {
+    width: 600px;
+    height: 600px;
+    background-color: transparent;
+    display: grid;
+    grid-template: 'scoreboard' 20% 'main-area' 1fr/1fr;
+
+    .scoreboard {
+      grid-area: scoreboard;
+      //background-color: #f1f1f1;
+    }
+
+    .main-area {
+      padding: 2px;
+
+      grid-area: main-area;
+      background-color: transparent;
+
+      display: grid;
+      grid-gap: 5px;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 1fr;
+
+      .puzzle {
+        cursor: pointer;
+        background-color: $puzzle-color;
+        transition: background-color  0.2s ease-in-out;
+        border-radius: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &:hover{
+          background-color: #bee38a;
+        }
+      }
+    }
+
+
+  }
+
+
 }
+
+
 
 
