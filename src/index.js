@@ -127,40 +127,29 @@ const gemPuzzle = {
 
 
     checkPuzzlesOrder() {
-
-        console.log(this.elements.puzzles)
-
-
-        let isRightOrder = this.elements.puzzles.every((el, ind) => {
-            return el.id=== ind + 1
-        })
-
-        console.log(isRightOrder)
-
-
-        if (isRightOrder) {
-            alert('You won!')
+        if (this.elements.puzzles.every((el, ind) => Number(el.id) === ind + 1)) {
+            alert('You won!');
         }
     },
     initiateAudio() {
         // Move sound for swap
         this.elements.audioMove = document.createElement('audio');
-        this.elements.audioMove.classList.add('audioMove')
+        this.elements.audioMove.classList.add('audioMove');
         let audioMoveSource = document.createElement('source');
         // this.elements.audioMove.setAttribute("autoplay", "true");
-        audioMoveSource.src = 'src/assets/sounds/Move.mp3'
+        audioMoveSource.src = 'src/assets/sounds/Move.mp3';
         // audio.innerHTML = "<source src=\"./assets/sounds/Move.mp3\"  type=\"audio/mpeg\">";
-        this.elements.audioMove.appendChild(audioMoveSource)
+        this.elements.audioMove.appendChild(audioMoveSource);
         document.body.appendChild(this.elements.audioMove);
 
         // Move sound for drag-n-drop
         this.elements.audioDragMove = document.createElement('audio');
-        this.elements.audioDragMove.classList.add('audioDragMove')
+        this.elements.audioDragMove.classList.add('audioDragMove');
         let audioDragMoveSource = document.createElement('source');
         // this.elements.audioDragMove.setAttribute("autoplay", "true");
-        audioDragMoveSource.src = 'src/assets/sounds/DragMove.mp3'
+        audioDragMoveSource.src = 'src/assets/sounds/DragMove.mp3';
         // audio.innerHTML = "<source src=\"./assets/sounds/Move.mp3\"  type=\"audio/mpeg\">";
-        this.elements.audioDragMove.appendChild(audioDragMoveSource)
+        this.elements.audioDragMove.appendChild(audioDragMoveSource);
         document.body.appendChild(this.elements.audioDragMove);
 
     },
@@ -169,11 +158,11 @@ const gemPuzzle = {
         for (let val of this.elements.puzzles) {
             val.addEventListener('click', () => {
                 if (val.className !== 'empty') {
-                    this.swapPuzzles(val)
+                    this.swapPuzzles(val);
                 }
             })
             if (val.className === 'puzzle') {
-                val.setAttribute('draggable', true)
+                val.setAttribute('draggable', true);
             }
         }
 <<<<<<< HEAD
@@ -191,37 +180,37 @@ const gemPuzzle = {
     updateTime() {
         this.values.timerId = setInterval(() => {
 
-            this.values.seconds += 1
+            this.values.seconds += 1;
 
             if (this.values.seconds === 60) {
-                this.values.minutes += 1
-                this.values.seconds = 0
+                this.values.minutes += 1;
+                this.values.seconds = 0;
             }
-            let min = this.values.minutes
-            let sec = this.values.seconds
+            let min = this.values.minutes;
+            let sec = this.values.seconds;
 
             if (this.values.minutes <= 9) {
-                min = `0${this.values.minutes}`
+                min = `0${this.values.minutes}`;
             }
             if (this.values.seconds <= 9) {
-                sec = `0${this.values.seconds}`
+                sec = `0${this.values.seconds}`;
             }
 
-            this.values.time = `${min}:${sec}`
-            this.elements.time.textContent = `Time:${this.values.time}`
+            this.values.time = `${min}:${sec}`;
+            this.elements.time.textContent = `Time:${this.values.time}`;
         }, 1000)
     },
     startGame() {
-        this.elements.pauseBtn.classList.remove('scoreElements_inactive')
-        this.elements.time.classList.remove('scoreElements_inactive')
-        this.elements.moves.classList.remove('scoreElements_inactive')
-        this.elements.menu.remove()
-        this.updateTime()
+        this.elements.pauseBtn.classList.remove('scoreElements_inactive');
+        this.elements.time.classList.remove('scoreElements_inactive');
+        this.elements.moves.classList.remove('scoreElements_inactive');
+        this.elements.menu.remove();
+        this.updateTime();
     },
     openMenu() {
-        this.elements.pauseBtn.classList.add('scoreElements_inactive')
-        this.elements.time.classList.add('scoreElements_inactive')
-        this.elements.moves.classList.add('scoreElements_inactive')
+        this.elements.pauseBtn.classList.add('scoreElements_inactive');
+        this.elements.time.classList.add('scoreElements_inactive');
+        this.elements.moves.classList.add('scoreElements_inactive');
         // this.elements.pauseBtn.style.cssText = 'color:red;'
 
         // this.elements.container.style.cssText = 'display:none;'
@@ -233,94 +222,96 @@ const gemPuzzle = {
         //    Create menu elements
         this.elements.continueGameBtn = document.createElement("h3");
         this.elements.continueGameBtn.classList.add('continueGameBtn', 'menu-item');
-        this.elements.continueGameBtn.textContent = `Continue Game`
+        this.elements.continueGameBtn.textContent = `Continue Game`;
         this.elements.continueGameBtn.addEventListener('click', () => {
             this.values.isPauseClicked = false;
-            this.startGame()
+            this.startGame();
         })
 
         this.elements.newGameBtn = document.createElement("h3");
         this.elements.newGameBtn.classList.add('newGameBtn', 'menu-item');
-        this.elements.newGameBtn.textContent = `New Game`
+        this.elements.newGameBtn.textContent = `New Game`;
         this.elements.newGameBtn.addEventListener('click', () => {
 
             // Reset time
-            this.values.time = '00:00'
+            this.values.time = '00:00';
             this.values.seconds = 0;
             this.values.minutes = 0;
-            this.elements.time.textContent = `Time:${this.values.time}`
+            this.elements.time.textContent = `Time:${this.values.time}`;
 
             //Reset moves
             this.values.moves = 0;
-            this.elements.moves.textContent = `Moves: ${this.values.moves}`
+            this.elements.moves.textContent = `Moves: ${this.values.moves}`;
 
             this.values.isPauseClicked = false;
-            this.createRandomPuzzles()
-            this.initiatePuzzles()
-            this.initiateDragNDrop()
-            this.startGame()
+            this.createRandomPuzzles();
+            this.initiatePuzzles();
+            this.initiateDragNDrop();
+            this.startGame();
         })
 
         this.elements.saveGameBtn = document.createElement("h3");
         this.elements.saveGameBtn.classList.add('saveGameBtn', 'menu-item');
-        this.elements.saveGameBtn.textContent = `Save Game`
+        this.elements.saveGameBtn.textContent = `Save Game`;
         this.elements.saveGameBtn.addEventListener('click', () => {
-            alert('saveGameBtn is clicked')
+            alert('saveGameBtn is clicked');
         })
 
         this.elements.savedGamesBtn = document.createElement("h3");
         this.elements.savedGamesBtn.classList.add('savedGamesBtn', 'menu-item',);
-        this.elements.savedGamesBtn.textContent = `Saved Games`
+        this.elements.savedGamesBtn.textContent = `Saved Games`;
         this.elements.savedGamesBtn.addEventListener('click', () => {
-            alert('savedGamesBtn is clicked')
+            alert('savedGamesBtn is clicked');
         })
 
         this.elements.bestScoresBtn = document.createElement("h3");
         this.elements.bestScoresBtn.classList.add('bestScoresBtn', 'menu-item');
-        this.elements.bestScoresBtn.textContent = `Best Scores`
+        this.elements.bestScoresBtn.textContent = `Best Scores`;
         this.elements.bestScoresBtn.addEventListener('click', () => {
-            alert('bestScoresBtn is clicked')
+            alert('bestScoresBtn is clicked');
         })
 
         this.elements.rulesGameBtn = document.createElement("h3");
         this.elements.rulesGameBtn.classList.add('rulesGameBtn', 'menu-item');
-        this.elements.rulesGameBtn.textContent = `Game Rules`
+        this.elements.rulesGameBtn.textContent = `Game Rules`;
         this.elements.rulesGameBtn.addEventListener('click', () => {
-            alert('rulesGameBtn is clicked')
+            alert('rulesGameBtn is clicked');
         })
 
         this.elements.settingsBtn = document.createElement("h3");
         this.elements.settingsBtn.classList.add('settingsBtn', 'menu-item');
-        this.elements.settingsBtn.textContent = `Settings`
+        this.elements.settingsBtn.textContent = `Settings`;
         this.elements.settingsBtn.addEventListener('click', () => {
-            alert('settingsBtn is clicked')
+            alert('settingsBtn is clicked');
         })
 
 
         if (this.values.isPauseClicked) {
-            this.elements.menu.appendChild(this.elements.continueGameBtn)
+            this.elements.menu.appendChild(this.elements.continueGameBtn);
         }
-        this.elements.menu.appendChild(this.elements.newGameBtn)
-        this.elements.menu.appendChild(this.elements.saveGameBtn)
-        this.elements.menu.appendChild(this.elements.savedGamesBtn)
-        this.elements.menu.appendChild(this.elements.bestScoresBtn)
-        this.elements.menu.appendChild(this.elements.rulesGameBtn)
-        this.elements.menu.appendChild(this.elements.settingsBtn)
+        this.elements.menu.appendChild(this.elements.newGameBtn);
+        this.elements.menu.appendChild(this.elements.saveGameBtn);
+        this.elements.menu.appendChild(this.elements.savedGamesBtn);
+        this.elements.menu.appendChild(this.elements.bestScoresBtn);
+        this.elements.menu.appendChild(this.elements.rulesGameBtn);
+        this.elements.menu.appendChild(this.elements.settingsBtn);
 
 
-        document.body.appendChild(this.elements.menu)
-
-
+        document.body.appendChild(this.elements.menu);
     },
     initiateDragNDrop() {
 
         let isAllowDragDrop = true;
+<<<<<<< HEAD
 >>>>>>> gem-puzzle
         let currentPuzzle = ''
+=======
+        let currentPuzzle = '';
+>>>>>>> gem-puzzle
         // Listeners for puzzles
         const dragStart = function () {
             setTimeout(() => {
-                this.classList.add('puzzle_hidden')
+                this.classList.add('puzzle_hidden');
             }, 0)
 
 <<<<<<< HEAD
@@ -328,16 +319,16 @@ const gemPuzzle = {
         }
 =======
             isAllowDragDrop = true;
-            currentPuzzle = this
+            currentPuzzle = this;
 
 
-            const currentPuzzleIndex = gemPuzzle.elements.puzzles.findIndex((el) => el === currentPuzzle)
-            const emptyElementIndex = gemPuzzle.elements.puzzles.findIndex((el) => el.className === 'empty')
+            const currentPuzzleIndex = gemPuzzle.elements.puzzles.findIndex((el) => el === currentPuzzle);
+            const emptyElementIndex = gemPuzzle.elements.puzzles.findIndex((el) => el.className === 'empty');
 
 
             const isElementsInAOneRow = () => {
-                const shiftedElementRowNumber = Math.floor(currentPuzzleIndex / 4) + 1
-                const emptyElementRowNumber = Math.floor(emptyElementIndex / 4) + 1
+                const shiftedElementRowNumber = Math.floor(currentPuzzleIndex / 4) + 1;
+                const emptyElementRowNumber = Math.floor(emptyElementIndex / 4) + 1;
                 if (shiftedElementRowNumber === emptyElementRowNumber) {
                     return true
                 }
@@ -349,20 +340,19 @@ const gemPuzzle = {
                 || (currentPuzzleIndex === emptyElementIndex + 1 && isElementsInAOneRow())
                 || (currentPuzzleIndex === emptyElementIndex - 1 && isElementsInAOneRow()))
             ) {
-                // isAllowDragDrop = false
-                isAllowDragDrop = true
+                isAllowDragDrop = false;
             }
 
         }
 
 >>>>>>> gem-puzzle
         const dragEnd = function () {
-            this.classList.remove('puzzle_hidden')
+            this.classList.remove('puzzle_hidden');
         }
 
         this.elements.puzzles.forEach((el) => {
-            el.addEventListener('dragstart', dragStart)
-            el.addEventListener('dragend', dragEnd)
+            el.addEventListener('dragstart', dragStart);
+            el.addEventListener('dragend', dragEnd);
 
         })
 
@@ -373,9 +363,10 @@ const gemPuzzle = {
 
 >>>>>>> gem-puzzle
         // Listeners for Empty Element
-        const emptyElement = this.elements.puzzles.find((el) => el.className === 'empty')
+        const emptyElement = this.elements.puzzles.find((el) => el.className === 'empty');
 
         const dragEnter = function (e) {
+<<<<<<< HEAD
             e.preventDefault()
 <<<<<<< HEAD
 =======
@@ -384,17 +375,24 @@ const gemPuzzle = {
             }
 >>>>>>> gem-puzzle
             this.classList.add('empty_hovered')
+=======
+            e.preventDefault();
+            if (!isAllowDragDrop) {
+                return
+            }
+            this.classList.add('empty_hovered');
+>>>>>>> gem-puzzle
         }
 
         const dragLeave = function () {
-            this.classList.remove('empty_hovered')
+            this.classList.remove('empty_hovered');
         }
         const dragOver = function (e) {
             e.preventDefault()
         }
-        emptyElement.addEventListener('dragenter', dragEnter)
-        emptyElement.addEventListener('dragleave', dragLeave)
-        emptyElement.addEventListener('dragover', dragOver)
+        emptyElement.addEventListener('dragenter', dragEnter);
+        emptyElement.addEventListener('dragleave', dragLeave);
+        emptyElement.addEventListener('dragover', dragOver);
 
         const dragDrop = function () {
 
@@ -404,32 +402,37 @@ const gemPuzzle = {
                 return
             }
 
-            const currentPuzzleIndex = gemPuzzle.elements.puzzles.findIndex((el) => el === currentPuzzle)
-            const emptyElementIndex = gemPuzzle.elements.puzzles.findIndex((el) => el === this)
+            const currentPuzzleIndex = gemPuzzle.elements.puzzles.findIndex((el) => el === currentPuzzle);
+            const emptyElementIndex = gemPuzzle.elements.puzzles.findIndex((el) => el === this);
 
 
+<<<<<<< HEAD
 >>>>>>> gem-puzzle
             const newEmpty = this.cloneNode(true)
             const newCurrentPuzzle = currentPuzzle.cloneNode(true)
+=======
+            const newEmpty = this.cloneNode(true);
+            const newCurrentPuzzle = currentPuzzle.cloneNode(true);
+>>>>>>> gem-puzzle
             currentPuzzle.replaceWith(newEmpty);
             this.replaceWith(newCurrentPuzzle);
 
 
-            newEmpty.classList.remove('empty_hovered')
-            newCurrentPuzzle.classList.remove('puzzle_hidden')
+            newEmpty.classList.remove('empty_hovered');
+            newCurrentPuzzle.classList.remove('puzzle_hidden');
 
-            newCurrentPuzzle.addEventListener('dragstart', dragStart)
-            newCurrentPuzzle.addEventListener('dragend', dragEnd)
-            newEmpty.addEventListener('drop', dragDrop)
-            newEmpty.addEventListener('dragenter', dragEnter)
-            newEmpty.addEventListener('dragleave', dragLeave)
-            newEmpty.addEventListener('dragover', dragOver)
+            newCurrentPuzzle.addEventListener('dragstart', dragStart);
+            newCurrentPuzzle.addEventListener('dragend', dragEnd);
+            newEmpty.addEventListener('drop', dragDrop);
+            newEmpty.addEventListener('dragenter', dragEnter);
+            newEmpty.addEventListener('dragleave', dragLeave);
+            newEmpty.addEventListener('dragover', dragOver);
 
 
             newCurrentPuzzle.addEventListener('click', () => {
-                gemPuzzle.swapPuzzles(newCurrentPuzzle)
+                gemPuzzle.swapPuzzles(newCurrentPuzzle);
             })
-            newCurrentPuzzle.setAttribute('draggable', true)
+            newCurrentPuzzle.setAttribute('draggable', true);
 
 
             //    update puzzles array after every swap
@@ -441,9 +444,10 @@ const gemPuzzle = {
 =======
 >>>>>>> gem-puzzle
 
-            gemPuzzle.elements.puzzles[currentPuzzleIndex] = newEmpty
-            gemPuzzle.elements.puzzles[emptyElementIndex] = newCurrentPuzzle
+            gemPuzzle.elements.puzzles[currentPuzzleIndex] = newEmpty;
+            gemPuzzle.elements.puzzles[emptyElementIndex] = newCurrentPuzzle;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         }
 
@@ -452,25 +456,33 @@ const gemPuzzle = {
 =======
             gemPuzzle.values.moves++
             gemPuzzle.elements.moves.textContent = `Moves: ${gemPuzzle.values.moves}`
+=======
+            gemPuzzle.values.moves++;
+            gemPuzzle.elements.moves.textContent = `Moves: ${gemPuzzle.values.moves}`;
+>>>>>>> gem-puzzle
 
             gemPuzzle.elements.audioDragMove.play();
 
-            gemPuzzle.checkPuzzlesOrder()
+            gemPuzzle.checkPuzzlesOrder();
 
         }
 
+<<<<<<< HEAD
         emptyElement.addEventListener('drop', dragDrop)
+>>>>>>> gem-puzzle
+=======
+        emptyElement.addEventListener('drop', dragDrop);
 >>>>>>> gem-puzzle
     },
     swapPuzzles(puzzle) {
         // find indexes of shifted and empty elements into puzzles array
-        const shiftedElementIndex = this.elements.puzzles.indexOf(this.elements.puzzles.find((el) => el.id === puzzle.id))
-        const emptyElementIndex = this.elements.puzzles.indexOf(this.elements.puzzles.find((el) => el.className === 'empty'))
+        const shiftedElementIndex = this.elements.puzzles.indexOf(this.elements.puzzles.find((el) => el.id === puzzle.id));
+        const emptyElementIndex = this.elements.puzzles.indexOf(this.elements.puzzles.find((el) => el.className === 'empty'));
 
         //Border checking
         const isElementsInAOneRow = () => {
-            const shiftedElementRowNumber = Math.floor(shiftedElementIndex / 4) + 1
-            const emptyElementRowNumber = Math.floor(emptyElementIndex / 4) + 1
+            const shiftedElementRowNumber = Math.floor(shiftedElementIndex / 4) + 1;
+            const emptyElementRowNumber = Math.floor(emptyElementIndex / 4) + 1;
             if (shiftedElementRowNumber === emptyElementRowNumber) {
                 return true
             }
@@ -483,13 +495,14 @@ const gemPuzzle = {
         ) {
             // swap elements
             const extra = this.elements.puzzles[shiftedElementIndex];
-            this.elements.puzzles[shiftedElementIndex] = this.elements.puzzles[emptyElementIndex]
-            this.elements.puzzles[emptyElementIndex] = extra
+            this.elements.puzzles[shiftedElementIndex] = this.elements.puzzles[emptyElementIndex];
+            this.elements.puzzles[emptyElementIndex] = extra;
             //clean and rerender of mainArea
             this.elements.mainArea.innerHTML = '';
             this.elements.puzzles.forEach((el) => {
-                this.elements.mainArea.appendChild(el)
+                this.elements.mainArea.appendChild(el);
             })
+<<<<<<< HEAD
 <<<<<<< HEAD
         }
     },
@@ -497,21 +510,27 @@ const gemPuzzle = {
 =======
             this.values.moves++
             this.elements.moves.textContent = `Moves: ${this.values.moves}`
+=======
+            this.values.moves++;
+            this.elements.moves.textContent = `Moves: ${this.values.moves}`;
+>>>>>>> gem-puzzle
 
             this.elements.audioMove.play();
+
+            this.checkPuzzlesOrder();
 
         }
     },
     createRandomPuzzles() {
         // Reset order board of puzzles
         this.elements.mainArea.innerHTML = '';
-        this.elements.puzzles = []
+        this.elements.puzzles = [];
 
 >>>>>>> gem-puzzle
         // Fill array for random indexes
-        let randomIndexes = []
+        let randomIndexes = [];
         while (randomIndexes.length < 16) {
-            let randomNumber = Math.floor(0 + Math.random() * (15 + 1 - 0))
+            let randomNumber = Math.floor(0 + Math.random() * (15 + 1 - 0));
             let found = false;
             for (let i = 0; i < randomIndexes.length; i++) {
                 if (randomIndexes[i] === randomNumber) {
@@ -531,14 +550,14 @@ const gemPuzzle = {
             this.elements.puzzles[i] = document.createElement("div");
             if (randomIndexes[i] + 1 === randomIndexes.length) {
                 this.elements.puzzles[i].classList.add('empty');
-                this.elements.puzzles[i].id = 16
+                this.elements.puzzles[i].id = 16;
 
             } else {
                 this.elements.puzzles[i].classList.add('puzzle');
                 this.elements.puzzles[i].id = randomIndexes[i] + 1;
-                this.elements.puzzles[i].textContent = randomIndexes[i] + 1
+                this.elements.puzzles[i].textContent = randomIndexes[i] + 1;
             }
-            this.elements.mainArea.appendChild(this.elements.puzzles[i])
+            this.elements.mainArea.appendChild(this.elements.puzzles[i]);
         }
     },
 <<<<<<< HEAD
@@ -572,7 +591,11 @@ const gemPuzzle = {
             } else {
                 this.elements.puzzles[i].classList.add('empty');
             }
+<<<<<<< HEAD
             this.elements.mainArea.appendChild(this.elements.puzzles[i])
+>>>>>>> gem-puzzle
+=======
+            this.elements.mainArea.appendChild(this.elements.puzzles[i]);
 >>>>>>> gem-puzzle
         }
     },
@@ -581,5 +604,5 @@ const gemPuzzle = {
 
 
 window.onload = () => {
-    gemPuzzle.init()
+    gemPuzzle.init();
 }
