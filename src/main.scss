@@ -29,8 +29,9 @@ body {
     display: grid;
     grid-template: 'scoreboard' 20% 'main-area' 1fr/1fr;
 
+
     .scoreboard {
-      margin-bottom: 10px;
+      //margin-bottom: 10px;
       border-radius: 4px;
 
       grid-area: scoreboard;
@@ -42,6 +43,9 @@ body {
       color: black;
       background-color: rgba(0, 0, 0, 0.5);
       //background-color: rgba(255, 255, 255, 0.5);
+
+      -moz-user-select: none;
+      user-select: none;
 
       .time {
         grid-area: time;
@@ -66,14 +70,19 @@ body {
         .pauseBtn {
           cursor: pointer;
           color: $puzzle-color;
-          transition: color 0.5s linear;
-
+          //transition: color 0.5s linear;
 
           &:hover {
-            color: red;
+            text-shadow: 0 0 5px $puzzle-color;
+            //color: red;
           }
 
         }
+
+        .scoreElements_inactive{
+          color: red;
+        }
+
       }
 
       .moves {
@@ -86,6 +95,11 @@ body {
         font-size: 25px;
         color: $puzzle-color;
       }
+
+      .scoreElements_inactive{
+        color: red;
+      }
+
     }
 
     .main-area {
@@ -117,6 +131,7 @@ body {
         -moz-user-select: none;
         user-select: none;
 
+
         &:hover {
           background-color: #bee38a;
         }
@@ -127,6 +142,72 @@ body {
   }
 
 }
+
+
+// Menu
+
+.menu {
+  width: 600px;
+  //height: 600px;
+  height: 90vh;
+  position: absolute;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.8);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-family: Consolas, Georgia sans-serif;
+  color: red;
+  font-size: 25px;
+
+  -moz-user-select: none;
+  user-select: none;
+
+  .menu-item {
+    cursor: pointer;
+    margin-bottom: 20px;
+    //transition: text-shadow 0.2s ease-in-out;
+    &:hover{
+      text-shadow: 0px 0px 5px red;
+    }
+  }
+
+
+  //.continueGameBtn {
+  //
+  //}
+  //
+  //.newGameBtn {
+  //
+  //}
+  //
+  //.saveGameBtn {
+  //
+  //}
+  //
+  //.savedGamesBtn {
+  //
+  //}
+  //
+  //.bestScoresBtn {
+  //
+  //}
+  //
+  //.rulesGameBtn {
+  //
+  //}
+  //
+  //.settingsBtn {
+  //
+  //}
+
+}
+
+
+
 
 
 // for drag and drop

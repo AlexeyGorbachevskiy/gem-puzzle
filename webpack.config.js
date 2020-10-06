@@ -6,7 +6,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetWebpackPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserWebpackPlugin = require('terser-webpack-plugin')
 
-
 const isDev = process.env.NODE_ENV === 'development'
 const isProd = !isDev
 const filename = ext => isDev ? `[name].${ext}` : `[name].[hash].${ext}`
@@ -131,7 +130,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(png|jpg|svg|gif)$/,
+                test: /\.(png|jpg|svg|gif|mp3|mpe?g)$/,
                 use: ['file-loader'],
                 // use: [{
                 //     loader: 'file-loader',
@@ -141,6 +140,11 @@ module.exports = {
                 //     }
                 // }]
             },
+            {
+                test: /\.(mp3|mpe?g)$/,
+                use: ['url-loader'],
+            },
+
             {
                 test: /\.(ttf|woff|woff2|eot)$/,
                 use: ['file-loader']
@@ -179,3 +183,4 @@ module.exports = {
         ]
     }
 }
+
