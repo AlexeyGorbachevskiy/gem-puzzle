@@ -29,8 +29,14 @@ body {
     display: grid;
     grid-template: 'scoreboard' 20% 'main-area' 1fr/1fr;
 
+<<<<<<< HEAD
     .scoreboard {
       margin-bottom: 10px;
+=======
+
+    .scoreboard {
+      //margin-bottom: 10px;
+>>>>>>> gem-puzzle
       border-radius: 4px;
 
       grid-area: scoreboard;
@@ -43,6 +49,12 @@ body {
       background-color: rgba(0, 0, 0, 0.5);
       //background-color: rgba(255, 255, 255, 0.5);
 
+<<<<<<< HEAD
+=======
+      -moz-user-select: none;
+      user-select: none;
+
+>>>>>>> gem-puzzle
       .time {
         grid-area: time;
 
@@ -66,6 +78,7 @@ body {
         .pauseBtn {
           cursor: pointer;
           color: $puzzle-color;
+<<<<<<< HEAD
           transition: color 0.5s linear;
 
 
@@ -74,6 +87,21 @@ body {
           }
 
         }
+=======
+          //transition: color 0.5s linear;
+
+          &:hover {
+            text-shadow: 0 0 5px $puzzle-color;
+            //color: red;
+          }
+
+        }
+
+        .scoreElements_inactive{
+          color: red;
+        }
+
+>>>>>>> gem-puzzle
       }
 
       .moves {
@@ -86,6 +114,14 @@ body {
         font-size: 25px;
         color: $puzzle-color;
       }
+<<<<<<< HEAD
+=======
+
+      .scoreElements_inactive{
+        color: red;
+      }
+
+>>>>>>> gem-puzzle
     }
 
     .main-area {
@@ -117,6 +153,10 @@ body {
         -moz-user-select: none;
         user-select: none;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> gem-puzzle
         &:hover {
           background-color: #bee38a;
         }
@@ -129,6 +169,75 @@ body {
 }
 
 
+<<<<<<< HEAD
+=======
+// Menu
+
+.menu {
+  width: 600px;
+  //height: 600px;
+  height: 90vh;
+  position: absolute;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.8);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-family: Consolas, Georgia sans-serif;
+  color: red;
+  font-size: 25px;
+
+  -moz-user-select: none;
+  user-select: none;
+
+  .menu-item {
+    cursor: pointer;
+    margin-bottom: 20px;
+    //transition: text-shadow 0.2s ease-in-out;
+    &:hover{
+      text-shadow: 0px 0px 5px red;
+    }
+  }
+
+
+  //.continueGameBtn {
+  //
+  //}
+  //
+  //.newGameBtn {
+  //
+  //}
+  //
+  //.saveGameBtn {
+  //
+  //}
+  //
+  //.savedGamesBtn {
+  //
+  //}
+  //
+  //.bestScoresBtn {
+  //
+  //}
+  //
+  //.rulesGameBtn {
+  //
+  //}
+  //
+  //.settingsBtn {
+  //
+  //}
+
+}
+
+
+
+
+
+>>>>>>> gem-puzzle
 // for drag and drop
 
 .puzzle_hidden {
