@@ -21,6 +21,7 @@ body {
   align-items: center;
 
   .container {
+    position: relative;
     margin: 0 10px;
     width: 600px;
     //height: 600px;
@@ -41,7 +42,7 @@ body {
 
       grid-area: scoreboard;
       display: grid;
-      grid-template: 'time pause moves' 1fr/ 1fr 1fr 1fr;
+      grid-template: 'volume time pause moves help' 1fr/ 0.5fr 1fr 1fr 1fr 0.5fr;
 
       font-size: 35px;
       font-family: Consolas, Georgia sans-serif;
@@ -53,6 +54,25 @@ body {
 =======
       -moz-user-select: none;
       user-select: none;
+
+<<<<<<< HEAD
+>>>>>>> gem-puzzle
+=======
+      .volume {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $puzzle-color;
+      }
+
+      .volume_Off {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: red;
+      }
 
 >>>>>>> gem-puzzle
       .time {
@@ -97,9 +117,6 @@ body {
 
         }
 
-        .scoreElements_inactive{
-          color: red;
-        }
 
 >>>>>>> gem-puzzle
       }
@@ -117,9 +134,22 @@ body {
 <<<<<<< HEAD
 =======
 
-      .scoreElements_inactive{
-        color: red;
+      .help {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $puzzle-color;
+        //transition: color 0.5s ease-in-out;
+
+        &:hover {
+          color: red;
+        }
       }
+
+<<<<<<< HEAD
+>>>>>>> gem-puzzle
+=======
 
 >>>>>>> gem-puzzle
     }
@@ -131,7 +161,7 @@ body {
       grid-area: main-area;
       display: grid;
       grid-gap: 5px;
-      grid-template-columns: repeat(4, 1fr);
+      //grid-template-columns: repeat(4, 1fr);
       grid-auto-rows: 1fr;
 
 
@@ -139,6 +169,11 @@ body {
       //border: 5px rgba(0,0,0,0.5) solid;
 
       .puzzle {
+        //background-size: cover;
+        //background-image: url('./assets/images/puzzle-images/1.jpg');
+
+        position: relative;
+
         cursor: pointer;
         background-color: $puzzle-color;
         transition: background-color 0.2s ease-in-out;
@@ -174,10 +209,10 @@ body {
 // Menu
 
 .menu {
-  width: 600px;
-  //height: 600px;
-  height: 90vh;
   position: absolute;
+
+  width: 100%;
+  height: 100%;
   z-index: 1000;
   background-color: rgba(0, 0, 0, 0.8);
 
@@ -197,7 +232,7 @@ body {
     cursor: pointer;
     margin-bottom: 20px;
     //transition: text-shadow 0.2s ease-in-out;
-    &:hover{
+    &:hover {
       text-shadow: 0px 0px 5px red;
     }
   }
@@ -234,9 +269,12 @@ body {
 }
 
 
+<<<<<<< HEAD
 
 
 
+>>>>>>> gem-puzzle
+=======
 >>>>>>> gem-puzzle
 // for drag and drop
 
@@ -247,6 +285,67 @@ body {
 .empty_hovered {
   background-color: rgba(0, 0, 0, 0.5);;
 }
+
+
+// Win Menu
+
+.win-menu {
+
+  position: absolute;
+  width: 100%;
+  //height: 600px;
+  height: 100%;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.8);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  -moz-user-select: none;
+  user-select: none;
+
+  .win-menu__text {
+    text-align: center;
+    line-height: 150%;
+    font-family: Consolas, Georgia sans-serif;
+    font-size: 27px;
+    display: flex;
+    flex-wrap: wrap;
+    color: #25ff54;
+    width: 70%;
+  }
+
+  .win-menu__btn {
+    margin-top: 10%;
+    width: 100px;
+    height: 35px;
+
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: green;
+    color: white;
+    font-size: 18px;
+    border-radius: 4px;
+
+
+    &:hover {
+      box-shadow: 0 0 5px $puzzle-color;
+    }
+
+    &:active {
+      box-shadow: 0 0 10px $puzzle-color;
+    }
+  }
+
+}
+
+
+
+
+
+
 
 
 

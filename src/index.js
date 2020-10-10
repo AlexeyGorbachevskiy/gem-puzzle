@@ -1,9 +1,14 @@
 import './main.scss'
+import '@fortawesome/fontawesome-free/js/fontawesome'
+import '@fortawesome/fontawesome-free/js/solid'
+import '@fortawesome/fontawesome-free/js/regular'
+import '@fortawesome/fontawesome-free/js/brands'
 
 const gemPuzzle = {
     elements: {
         container: '',
         scoreboard: '',
+        volume: '',
         time: '',
         pause: '',
 <<<<<<< HEAD
@@ -23,6 +28,7 @@ const gemPuzzle = {
 
 =======
         moves: '',
+        help: '',
         mainArea: '',
         puzzles: [],
 
@@ -37,33 +43,38 @@ const gemPuzzle = {
         rulesGameBtn: '',
         settingsBtn: '',
 
+        winMenu: '',
+
+
         audioMove: '',
         audioDragMove: '',
         audioWin: '',
     },
     values: {
+        dimension: 4,
         moves: 0,
         timerId: '',
         time: `00:00`,
         minutes: 0,
         seconds: 0,
         isPauseClicked: false,
-
+        isVolumeOn: true,
+        randomImageName: '',
     },
 
     init() {
         //Create main container
-        this.elements.container = document.createElement("div");
+        this.elements.container = document.createElement('div');
         this.elements.container.classList.add('container');
 
         // Create scoreboard
-        this.elements.scoreboard = document.createElement("div");
+        this.elements.scoreboard = document.createElement('div');
         this.elements.scoreboard.classList.add('scoreboard');
 
 >>>>>>> gem-puzzle
         // Create scoreboard parts (time, pause, moves)
         // Time
-        this.elements.time = document.createElement("div");
+        this.elements.time = document.createElement('div');
         this.elements.time.classList.add('time');
 <<<<<<< HEAD
         this.elements.time.textContent = `Time:`
@@ -71,14 +82,18 @@ const gemPuzzle = {
         this.elements.time.textContent = `Time:${this.values.time}`
 >>>>>>> gem-puzzle
         // Pause container with button inside
-        this.elements.pause = document.createElement("div");
+        this.elements.pause = document.createElement('div');
         this.elements.pause.classList.add('pause');
 
         this.elements.pauseBtn = document.createElement("h3");
         this.elements.pauseBtn.classList.add('pauseBtn');
+<<<<<<< HEAD
         this.elements.pauseBtn.textContent = `Pause game`
 <<<<<<< HEAD
 =======
+=======
+        this.elements.pauseBtn.textContent = `Pause`
+>>>>>>> gem-puzzle
         this.elements.pauseBtn.addEventListener('click', () => {
             clearInterval(this.values.timerId)
             this.values.isPauseClicked = true;
@@ -86,8 +101,32 @@ const gemPuzzle = {
         })
 >>>>>>> gem-puzzle
 
+        // Volume
+        this.elements.volume = document.createElement('div');
+        this.elements.volume.classList.add('volume');
+        this.elements.volume.innerHTML = '<i class="fas fa-volume-up"></i>'
+        this.elements.volume.addEventListener('click', () => {
+            if (this.elements.volume.className === 'volume') {
+                this.values.isVolumeOn = false;
+                this.elements.volume.classList.remove('volume');
+                this.elements.volume.classList.add('volume_Off');
+                this.elements.volume.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                this.values.isVolumeOn = true;
+                this.elements.volume.classList.remove('volume_Off');
+                this.elements.volume.classList.add('volume');
+                this.elements.volume.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+
+        })
+
+        // Help
+        this.elements.help = document.createElement('div');
+        this.elements.help.classList.add('help');
+        this.elements.help.innerHTML = '<i class="fas fa-question-circle"></i>';
+
         // Moves
-        this.elements.moves = document.createElement("div");
+        this.elements.moves = document.createElement('div');
         this.elements.moves.classList.add('moves');
 <<<<<<< HEAD
         this.elements.moves.textContent = `Moves:`
@@ -95,18 +134,22 @@ const gemPuzzle = {
         this.elements.moves.textContent = `Moves: ${this.values.moves}`
 >>>>>>> gem-puzzle
 
-        this.elements.pause.appendChild(this.elements.pauseBtn)
-        this.elements.scoreboard.appendChild(this.elements.time)
-        this.elements.scoreboard.appendChild(this.elements.pause)
-        this.elements.scoreboard.appendChild(this.elements.moves)
+        this.elements.pause.appendChild(this.elements.pauseBtn);
+        this.elements.scoreboard.appendChild(this.elements.volume);
+        this.elements.scoreboard.appendChild(this.elements.time);
+        this.elements.scoreboard.appendChild(this.elements.pause);
+        this.elements.scoreboard.appendChild(this.elements.moves);
+        this.elements.scoreboard.appendChild(this.elements.help);
         this.elements.container.appendChild(this.elements.scoreboard);
 
 
         //Create main area for puzzles
         this.elements.mainArea = document.createElement("div");
         this.elements.mainArea.classList.add('main-area');
-        this.elements.container.appendChild(this.elements.mainArea)
+        this.elements.mainArea.style = `grid-template-columns: repeat(${this.values.dimension}, 1fr);`
+        this.elements.container.appendChild(this.elements.mainArea);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         this.createRandomPuzzles()
@@ -115,20 +158,99 @@ const gemPuzzle = {
 
 =======
         document.body.appendChild(this.elements.container)
+=======
+        document.body.appendChild(this.elements.container);
+>>>>>>> gem-puzzle
 
-        this.initiateAudio()
-        this.createSortedPuzzles()
-        this.initiatePuzzles()
-        this.initiateDragNDrop()
-        this.openMenu()
+        this.values.randomImageName = this.chooseRandomImage();
+        this.initiateAudio();
+        this.createSortedPuzzles();
+        this.initiatePuzzles();
+        this.initiateDragNDrop();
+        this.openMenu();
         // keyElement.classList.toggle("someClass", this.bool);
 
     },
 
 
+    animateSwapping() {
+        // swap elements
+        // let i = 0;
+        // const puzzleHeight = this.elements.puzzles[shiftedElementIndex].clientHeight
+        // const timerId= setInterval(() => {
+        //     // 5 - it's grid gap (margin)
+        //     if (i <= puzzleHeight + 5) {
+        //         this.elements.puzzles[shiftedElementIndex].style = `top: ${i}px`;
+        //         i++;
+        //     } else {
+        //         this.elements.puzzles[shiftedElementIndex].style = `top: 0px`;
+        //
+        //         const extra = this.elements.puzzles[shiftedElementIndex];
+        //         this.elements.puzzles[shiftedElementIndex] = this.elements.puzzles[emptyElementIndex];
+        //         this.elements.puzzles[emptyElementIndex] = extra;
+        //
+        //
+        //         //clean and rerender of mainArea
+        //
+        //         this.elements.mainArea.innerHTML = '';
+        //         this.elements.puzzles.forEach((el) => {
+        //             this.elements.mainArea.appendChild(el);
+        //         })
+        //
+        //         clearInterval(timerId)
+        //
+        //     }
+        // }, 5)
+
+    },
+
+
+    chooseRandomImage() {
+        let min = 1;
+        let max = 150;
+        let randomNumber = Math.floor(min + Math.random() * (max + 1 - min));
+        return randomNumber
+    },
+
+
     checkPuzzlesOrder() {
         if (this.elements.puzzles.every((el, ind) => Number(el.id) === ind + 1)) {
-            alert('You won!');
+            clearInterval(this.values.timerId);
+            this.elements.winMenu = document.createElement('div');
+            this.elements.winMenu.classList.add('win-menu');
+            const winMenuText = document.createElement('div');
+            winMenuText.classList.add('win-menu__text');
+            winMenuText.textContent = `Hooray! You solved the puzzle in ${this.values.time} and ${this.values.moves} moves`;
+            this.elements.winMenu.appendChild(winMenuText);
+            this.elements.container.appendChild(this.elements.winMenu);
+
+            const winMenuBtn = document.createElement('button');
+            winMenuBtn.classList.add('win-menu__btn');
+            winMenuBtn.textContent = 'Ok';
+            this.elements.winMenu.appendChild(winMenuBtn);
+
+            if (this.values.isVolumeOn) {
+                this.elements.audioWin.play()
+            }
+
+            winMenuBtn.addEventListener('click', () => {
+                this.elements.winMenu.remove();
+                this.elements.audioWin.pause();
+                this.elements.audioWin.currentTime = 0;
+
+
+                // this.initiatePuzzles();
+                // this.initiateDragNDrop();
+                this.openMenu();
+                this.values.minutes = 0;
+                this.values.seconds = 0;
+                this.values.time = '00:00'
+                this.elements.time.textContent = `Time:${this.values.time}`
+                this.values.moves = 0;
+                this.elements.moves.textContent = `Moves: ${this.values.moves}`
+
+
+            })
         }
     },
     initiateAudio() {
@@ -151,6 +273,16 @@ const gemPuzzle = {
         // audio.innerHTML = "<source src=\"./assets/sounds/Move.mp3\"  type=\"audio/mpeg\">";
         this.elements.audioDragMove.appendChild(audioDragMoveSource);
         document.body.appendChild(this.elements.audioDragMove);
+
+        // Move sound for win
+        this.elements.audioWin = document.createElement('audio');
+        this.elements.audioWin.classList.add('audioWin');
+        let audioWinSource = document.createElement('source');
+        // this.elements.audioDragMove.setAttribute("autoplay", "true");
+        audioWinSource.src = 'src/assets/sounds/Win.mp3';
+        // audio.innerHTML = "<source src=\"./assets/sounds/Move.mp3\"  type=\"audio/mpeg\">";
+        this.elements.audioWin.appendChild(audioWinSource);
+        document.body.appendChild(this.elements.audioWin);
 
     },
     initiatePuzzles() {
@@ -201,16 +333,11 @@ const gemPuzzle = {
         }, 1000)
     },
     startGame() {
-        this.elements.pauseBtn.classList.remove('scoreElements_inactive');
-        this.elements.time.classList.remove('scoreElements_inactive');
-        this.elements.moves.classList.remove('scoreElements_inactive');
+        this.values.randomImageName = this.chooseRandomImage()
         this.elements.menu.remove();
         this.updateTime();
     },
     openMenu() {
-        this.elements.pauseBtn.classList.add('scoreElements_inactive');
-        this.elements.time.classList.add('scoreElements_inactive');
-        this.elements.moves.classList.add('scoreElements_inactive');
         // this.elements.pauseBtn.style.cssText = 'color:red;'
 
         // this.elements.container.style.cssText = 'display:none;'
@@ -222,7 +349,7 @@ const gemPuzzle = {
         //    Create menu elements
         this.elements.continueGameBtn = document.createElement("h3");
         this.elements.continueGameBtn.classList.add('continueGameBtn', 'menu-item');
-        this.elements.continueGameBtn.textContent = `Continue Game`;
+        this.elements.continueGameBtn.textContent = `Continue`;
         this.elements.continueGameBtn.addEventListener('click', () => {
             this.values.isPauseClicked = false;
             this.startGame();
@@ -290,14 +417,14 @@ const gemPuzzle = {
             this.elements.menu.appendChild(this.elements.continueGameBtn);
         }
         this.elements.menu.appendChild(this.elements.newGameBtn);
-        this.elements.menu.appendChild(this.elements.saveGameBtn);
+        if (this.values.isPauseClicked) {
+            this.elements.menu.appendChild(this.elements.saveGameBtn);
+        }
         this.elements.menu.appendChild(this.elements.savedGamesBtn);
         this.elements.menu.appendChild(this.elements.bestScoresBtn);
         this.elements.menu.appendChild(this.elements.rulesGameBtn);
         this.elements.menu.appendChild(this.elements.settingsBtn);
-
-
-        document.body.appendChild(this.elements.menu);
+        this.elements.container.appendChild(this.elements.menu);
     },
     initiateDragNDrop() {
 
@@ -340,7 +467,8 @@ const gemPuzzle = {
                 || (currentPuzzleIndex === emptyElementIndex + 1 && isElementsInAOneRow())
                 || (currentPuzzleIndex === emptyElementIndex - 1 && isElementsInAOneRow()))
             ) {
-                isAllowDragDrop = false;
+                // isAllowDragDrop = false;
+                isAllowDragDrop = true;
             }
 
         }
@@ -461,7 +589,10 @@ const gemPuzzle = {
             gemPuzzle.elements.moves.textContent = `Moves: ${gemPuzzle.values.moves}`;
 >>>>>>> gem-puzzle
 
-            gemPuzzle.elements.audioDragMove.play();
+            if (gemPuzzle.values.isVolumeOn) {
+                gemPuzzle.elements.audioDragMove.play();
+            }
+
 
             gemPuzzle.checkPuzzlesOrder();
 
@@ -481,15 +612,15 @@ const gemPuzzle = {
 
         //Border checking
         const isElementsInAOneRow = () => {
-            const shiftedElementRowNumber = Math.floor(shiftedElementIndex / 4) + 1;
-            const emptyElementRowNumber = Math.floor(emptyElementIndex / 4) + 1;
+            const shiftedElementRowNumber = Math.floor(shiftedElementIndex / this.values.dimension) + 1;
+            const emptyElementRowNumber = Math.floor(emptyElementIndex / this.values.dimension) + 1;
             if (shiftedElementRowNumber === emptyElementRowNumber) {
                 return true
             }
             return false
         }
-        if (shiftedElementIndex === emptyElementIndex + 4
-            || shiftedElementIndex === emptyElementIndex - 4
+        if (shiftedElementIndex === emptyElementIndex + this.values.dimension
+            || shiftedElementIndex === emptyElementIndex - this.values.dimension
             || (shiftedElementIndex === emptyElementIndex + 1 && isElementsInAOneRow())
             || (shiftedElementIndex === emptyElementIndex - 1 && isElementsInAOneRow())
         ) {
@@ -497,11 +628,15 @@ const gemPuzzle = {
             const extra = this.elements.puzzles[shiftedElementIndex];
             this.elements.puzzles[shiftedElementIndex] = this.elements.puzzles[emptyElementIndex];
             this.elements.puzzles[emptyElementIndex] = extra;
+
+
             //clean and rerender of mainArea
+
             this.elements.mainArea.innerHTML = '';
             this.elements.puzzles.forEach((el) => {
                 this.elements.mainArea.appendChild(el);
             })
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         }
@@ -511,11 +646,17 @@ const gemPuzzle = {
             this.values.moves++
             this.elements.moves.textContent = `Moves: ${this.values.moves}`
 =======
+=======
+
+>>>>>>> gem-puzzle
             this.values.moves++;
             this.elements.moves.textContent = `Moves: ${this.values.moves}`;
 >>>>>>> gem-puzzle
 
-            this.elements.audioMove.play();
+            if (this.values.isVolumeOn) {
+                this.elements.audioMove.play();
+            }
+
 
             this.checkPuzzlesOrder();
 
@@ -529,8 +670,12 @@ const gemPuzzle = {
 >>>>>>> gem-puzzle
         // Fill array for random indexes
         let randomIndexes = [];
-        while (randomIndexes.length < 16) {
-            let randomNumber = Math.floor(0 + Math.random() * (15 + 1 - 0));
+        let puzzlesCount = this.values.dimension * this.values.dimension;
+
+        while (randomIndexes.length < puzzlesCount) {
+            let min = 0;
+            let max = puzzlesCount - 1;
+            let randomNumber = Math.floor(min + Math.random() * (max + 1 - min));
             let found = false;
             for (let i = 0; i < randomIndexes.length; i++) {
                 if (randomIndexes[i] === randomNumber) {
@@ -550,14 +695,27 @@ const gemPuzzle = {
             this.elements.puzzles[i] = document.createElement("div");
             if (randomIndexes[i] + 1 === randomIndexes.length) {
                 this.elements.puzzles[i].classList.add('empty');
-                this.elements.puzzles[i].id = 16;
+                this.elements.puzzles[i].id = this.values.dimension * this.values.dimension;
 
             } else {
                 this.elements.puzzles[i].classList.add('puzzle');
                 this.elements.puzzles[i].id = randomIndexes[i] + 1;
                 this.elements.puzzles[i].textContent = randomIndexes[i] + 1;
+
+                // Image assemble
+                this.elements.puzzles[i].style.backgroundImage = `url('src/assets/images/puzzle-images/${this.values.randomImageName}.jpg')`;
+                this.elements.puzzles[i].style.backgroundRepeat = `no-repeat`;
+                const puzzleWidth = this.elements.mainArea.clientWidth / this.values.dimension;
+                const puzzleHeight = this.elements.mainArea.clientHeight / this.values.dimension;
+                const left = puzzleWidth * (randomIndexes[i] % this.values.dimension);
+                const top = puzzleHeight * Math.floor((randomIndexes[i] / this.values.dimension));
+                this.elements.puzzles[i].style.backgroundSize = `${this.elements.mainArea.clientWidth}px ${this.elements.mainArea.clientHeight}px`;
+                this.elements.puzzles[i].style.backgroundPosition = `-${left}px -${top}px`;
+
             }
             this.elements.mainArea.appendChild(this.elements.puzzles[i]);
+
+
         }
     },
 <<<<<<< HEAD
@@ -581,12 +739,23 @@ const gemPuzzle = {
 =======
 
     createSortedPuzzles() {
-        for (let i = 0; i < 16; i++) {
+        for (let i = 0; i < this.values.dimension * this.values.dimension; i++) {
             this.elements.puzzles[i] = document.createElement("div");
             this.elements.puzzles[i].id = i + 1;
-            if (i !== 15) {
+            if (i !== this.values.dimension * this.values.dimension - 1) {
                 this.elements.puzzles[i].classList.add('puzzle');
                 this.elements.puzzles[i].textContent = i + 1;
+
+
+                // Assemble of image
+                this.elements.puzzles[i].style.backgroundImage = `url('src/assets/images/puzzle-images/${this.values.randomImageName}.jpg')`;
+                this.elements.puzzles[i].style.backgroundRepeat = `no-repeat`;
+                const puzzleWidth = this.elements.mainArea.clientWidth / this.values.dimension;
+                const puzzleHeight = this.elements.mainArea.clientHeight / this.values.dimension;
+                const left = puzzleWidth * (i % this.values.dimension);
+                const top = puzzleHeight * Math.floor((i / this.values.dimension));
+                this.elements.puzzles[i].style.backgroundSize = `${this.elements.mainArea.clientWidth}px ${this.elements.mainArea.clientHeight}px`;
+                this.elements.puzzles[i].style.backgroundPosition = `-${left}px -${top}px`;
 
             } else {
                 this.elements.puzzles[i].classList.add('empty');
