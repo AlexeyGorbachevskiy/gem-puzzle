@@ -30,14 +30,9 @@ body {
     display: grid;
     grid-template: 'scoreboard' 20% 'main-area' 1fr/1fr;
 
-<<<<<<< HEAD
-    .scoreboard {
-      margin-bottom: 10px;
-=======
 
     .scoreboard {
       //margin-bottom: 10px;
->>>>>>> gem-puzzle
       border-radius: 4px;
 
       grid-area: scoreboard;
@@ -50,14 +45,9 @@ body {
       background-color: rgba(0, 0, 0, 0.5);
       //background-color: rgba(255, 255, 255, 0.5);
 
-<<<<<<< HEAD
-=======
       -moz-user-select: none;
       user-select: none;
 
-<<<<<<< HEAD
->>>>>>> gem-puzzle
-=======
       .volume {
         cursor: pointer;
         display: flex;
@@ -74,7 +64,6 @@ body {
         color: red;
       }
 
->>>>>>> gem-puzzle
       .time {
         grid-area: time;
 
@@ -98,16 +87,6 @@ body {
         .pauseBtn {
           cursor: pointer;
           color: $puzzle-color;
-<<<<<<< HEAD
-          transition: color 0.5s linear;
-
-
-          &:hover {
-            color: red;
-          }
-
-        }
-=======
           //transition: color 0.5s linear;
 
           &:hover {
@@ -118,7 +97,6 @@ body {
         }
 
 
->>>>>>> gem-puzzle
       }
 
       .moves {
@@ -131,8 +109,6 @@ body {
         font-size: 25px;
         color: $puzzle-color;
       }
-<<<<<<< HEAD
-=======
 
       .help {
         cursor: pointer;
@@ -147,11 +123,7 @@ body {
         }
       }
 
-<<<<<<< HEAD
->>>>>>> gem-puzzle
-=======
 
->>>>>>> gem-puzzle
     }
 
     .main-area {
@@ -188,10 +160,7 @@ body {
         -moz-user-select: none;
         user-select: none;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> gem-puzzle
         &:hover {
           background-color: #bee38a;
         }
@@ -204,8 +173,6 @@ body {
 }
 
 
-<<<<<<< HEAD
-=======
 // Menu
 
 .menu {
@@ -269,13 +236,6 @@ body {
 }
 
 
-<<<<<<< HEAD
-
-
-
->>>>>>> gem-puzzle
-=======
->>>>>>> gem-puzzle
 // for drag and drop
 
 .puzzle_hidden {

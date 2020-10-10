@@ -11,22 +11,6 @@ const gemPuzzle = {
         volume: '',
         time: '',
         pause: '',
-<<<<<<< HEAD
-        pauseBtn: '',
-        moves: '',
-        mainArea: '',
-        puzzles: [],
-    },
-    init() {
-        //Create main container
-        this.elements.container = document.createElement("div");
-        this.elements.container.classList.add('container');
-
-        // Create scoreboard
-        this.elements.scoreboard = document.createElement("div");
-        this.elements.scoreboard.classList.add('scoreboard');
-
-=======
         moves: '',
         help: '',
         mainArea: '',
@@ -71,35 +55,23 @@ const gemPuzzle = {
         this.elements.scoreboard = document.createElement('div');
         this.elements.scoreboard.classList.add('scoreboard');
 
->>>>>>> gem-puzzle
         // Create scoreboard parts (time, pause, moves)
         // Time
         this.elements.time = document.createElement('div');
         this.elements.time.classList.add('time');
-<<<<<<< HEAD
-        this.elements.time.textContent = `Time:`
-=======
         this.elements.time.textContent = `Time:${this.values.time}`
->>>>>>> gem-puzzle
         // Pause container with button inside
         this.elements.pause = document.createElement('div');
         this.elements.pause.classList.add('pause');
 
         this.elements.pauseBtn = document.createElement("h3");
         this.elements.pauseBtn.classList.add('pauseBtn');
-<<<<<<< HEAD
-        this.elements.pauseBtn.textContent = `Pause game`
-<<<<<<< HEAD
-=======
-=======
         this.elements.pauseBtn.textContent = `Pause`
->>>>>>> gem-puzzle
         this.elements.pauseBtn.addEventListener('click', () => {
             clearInterval(this.values.timerId)
             this.values.isPauseClicked = true;
             this.openMenu()
         })
->>>>>>> gem-puzzle
 
         // Volume
         this.elements.volume = document.createElement('div');
@@ -128,11 +100,7 @@ const gemPuzzle = {
         // Moves
         this.elements.moves = document.createElement('div');
         this.elements.moves.classList.add('moves');
-<<<<<<< HEAD
-        this.elements.moves.textContent = `Moves:`
-=======
         this.elements.moves.textContent = `Moves: ${this.values.moves}`
->>>>>>> gem-puzzle
 
         this.elements.pause.appendChild(this.elements.pauseBtn);
         this.elements.scoreboard.appendChild(this.elements.volume);
@@ -149,18 +117,7 @@ const gemPuzzle = {
         this.elements.mainArea.style = `grid-template-columns: repeat(${this.values.dimension}, 1fr);`
         this.elements.container.appendChild(this.elements.mainArea);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-        this.createRandomPuzzles()
-        document.body.appendChild(this.elements.container)
-
-
-=======
-        document.body.appendChild(this.elements.container)
-=======
         document.body.appendChild(this.elements.container);
->>>>>>> gem-puzzle
 
         this.values.randomImageName = this.chooseRandomImage();
         this.initiateAudio();
@@ -286,7 +243,6 @@ const gemPuzzle = {
 
     },
     initiatePuzzles() {
->>>>>>> gem-puzzle
         for (let val of this.elements.puzzles) {
             val.addEventListener('click', () => {
                 if (val.className !== 'empty') {
@@ -297,17 +253,6 @@ const gemPuzzle = {
                 val.setAttribute('draggable', true);
             }
         }
-<<<<<<< HEAD
-
-
-        this.dragNDrop()
-        // keyElement.classList.toggle("someClass", this.bool);
-
-    },
-
-
-    dragNDrop() {
-=======
     },
     updateTime() {
         this.values.timerId = setInterval(() => {
@@ -429,22 +374,13 @@ const gemPuzzle = {
     initiateDragNDrop() {
 
         let isAllowDragDrop = true;
-<<<<<<< HEAD
->>>>>>> gem-puzzle
-        let currentPuzzle = ''
-=======
         let currentPuzzle = '';
->>>>>>> gem-puzzle
         // Listeners for puzzles
         const dragStart = function () {
             setTimeout(() => {
                 this.classList.add('puzzle_hidden');
             }, 0)
 
-<<<<<<< HEAD
-            currentPuzzle = this
-        }
-=======
             isAllowDragDrop = true;
             currentPuzzle = this;
 
@@ -473,7 +409,6 @@ const gemPuzzle = {
 
         }
 
->>>>>>> gem-puzzle
         const dragEnd = function () {
             this.classList.remove('puzzle_hidden');
         }
@@ -484,32 +419,18 @@ const gemPuzzle = {
 
         })
 
-<<<<<<< HEAD
-=======
         //--------------------------------Borders checking--------------------------------------
 
 
->>>>>>> gem-puzzle
         // Listeners for Empty Element
         const emptyElement = this.elements.puzzles.find((el) => el.className === 'empty');
 
         const dragEnter = function (e) {
-<<<<<<< HEAD
-            e.preventDefault()
-<<<<<<< HEAD
-=======
-            if (!isAllowDragDrop) {
-                return
-            }
->>>>>>> gem-puzzle
-            this.classList.add('empty_hovered')
-=======
             e.preventDefault();
             if (!isAllowDragDrop) {
                 return
             }
             this.classList.add('empty_hovered');
->>>>>>> gem-puzzle
         }
 
         const dragLeave = function () {
@@ -524,8 +445,6 @@ const gemPuzzle = {
 
         const dragDrop = function () {
 
-<<<<<<< HEAD
-=======
             if (!isAllowDragDrop) {
                 return
             }
@@ -534,14 +453,8 @@ const gemPuzzle = {
             const emptyElementIndex = gemPuzzle.elements.puzzles.findIndex((el) => el === this);
 
 
-<<<<<<< HEAD
->>>>>>> gem-puzzle
-            const newEmpty = this.cloneNode(true)
-            const newCurrentPuzzle = currentPuzzle.cloneNode(true)
-=======
             const newEmpty = this.cloneNode(true);
             const newCurrentPuzzle = currentPuzzle.cloneNode(true);
->>>>>>> gem-puzzle
             currentPuzzle.replaceWith(newEmpty);
             this.replaceWith(newCurrentPuzzle);
 
@@ -565,29 +478,12 @@ const gemPuzzle = {
 
             //    update puzzles array after every swap
 
-<<<<<<< HEAD
-            const currentPuzzleIndex = gemPuzzle.elements.puzzles.findIndex((el) => el === currentPuzzle)
-            const emptyElementIndex = gemPuzzle.elements.puzzles.findIndex((el) => el === this)
-
-=======
->>>>>>> gem-puzzle
 
             gemPuzzle.elements.puzzles[currentPuzzleIndex] = newEmpty;
             gemPuzzle.elements.puzzles[emptyElementIndex] = newCurrentPuzzle;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        }
-
-        emptyElement.addEventListener('drop', dragDrop)
-
-=======
-            gemPuzzle.values.moves++
-            gemPuzzle.elements.moves.textContent = `Moves: ${gemPuzzle.values.moves}`
-=======
             gemPuzzle.values.moves++;
             gemPuzzle.elements.moves.textContent = `Moves: ${gemPuzzle.values.moves}`;
->>>>>>> gem-puzzle
 
             if (gemPuzzle.values.isVolumeOn) {
                 gemPuzzle.elements.audioDragMove.play();
@@ -598,12 +494,7 @@ const gemPuzzle = {
 
         }
 
-<<<<<<< HEAD
-        emptyElement.addEventListener('drop', dragDrop)
->>>>>>> gem-puzzle
-=======
         emptyElement.addEventListener('drop', dragDrop);
->>>>>>> gem-puzzle
     },
     swapPuzzles(puzzle) {
         // find indexes of shifted and empty elements into puzzles array
@@ -636,22 +527,9 @@ const gemPuzzle = {
             this.elements.puzzles.forEach((el) => {
                 this.elements.mainArea.appendChild(el);
             })
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        }
-    },
-    createRandomPuzzles() {
-=======
-            this.values.moves++
-            this.elements.moves.textContent = `Moves: ${this.values.moves}`
-=======
-=======
 
->>>>>>> gem-puzzle
             this.values.moves++;
             this.elements.moves.textContent = `Moves: ${this.values.moves}`;
->>>>>>> gem-puzzle
 
             if (this.values.isVolumeOn) {
                 this.elements.audioMove.play();
@@ -667,7 +545,6 @@ const gemPuzzle = {
         this.elements.mainArea.innerHTML = '';
         this.elements.puzzles = [];
 
->>>>>>> gem-puzzle
         // Fill array for random indexes
         let randomIndexes = [];
         let puzzlesCount = this.values.dimension * this.values.dimension;
@@ -718,25 +595,6 @@ const gemPuzzle = {
 
         }
     },
-<<<<<<< HEAD
-    createSortedPuzzles() {
-        const randomEmptyPlace = Math.floor(0 + Math.random() * (16 + 1 - 0))
-        let isEmptyPuzzleCreated = false
-        for (let i = 0; i < 16; i++) {
-            this.elements.puzzles[i] = document.createElement("div");
-            if (i !== randomEmptyPlace - 1) {
-                this.elements.puzzles[i].classList.add('puzzle');
-                isEmptyPuzzleCreated ? this.elements.puzzles[i].id = i : this.elements.puzzles[i].id = i + 1;
-                isEmptyPuzzleCreated ? this.elements.puzzles[i].textContent = i : this.elements.puzzles[i].textContent = i + 1
-                this.elements.mainArea.appendChild(this.elements.puzzles[i])
-            } else {
-                this.elements.puzzles[i] = document.createElement("div");
-                this.elements.puzzles[i].classList.add('empty');
-                this.elements.puzzles[i].id = 15;
-                this.elements.mainArea.appendChild(this.elements.puzzles[i])
-                isEmptyPuzzleCreated = true
-            }
-=======
 
     createSortedPuzzles() {
         for (let i = 0; i < this.values.dimension * this.values.dimension; i++) {
@@ -760,12 +618,7 @@ const gemPuzzle = {
             } else {
                 this.elements.puzzles[i].classList.add('empty');
             }
-<<<<<<< HEAD
-            this.elements.mainArea.appendChild(this.elements.puzzles[i])
->>>>>>> gem-puzzle
-=======
             this.elements.mainArea.appendChild(this.elements.puzzles[i]);
->>>>>>> gem-puzzle
         }
     },
 
