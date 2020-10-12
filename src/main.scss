@@ -23,8 +23,9 @@ body {
   .container {
     position: relative;
     margin: 0 10px;
-    width: 600px;
+    //width: 700px;
     //height: 600px;
+    width: 45%;
     height: 90vh;
     background-color: transparent;
     display: grid;
@@ -40,7 +41,7 @@ body {
       grid-template: 'volume time pause moves help' 1fr/ 0.5fr 1fr 1fr 1fr 0.5fr;
 
       font-size: 35px;
-      font-family: Consolas, Georgia sans-serif;
+      font-family: Consolas, Georgia, sans-serif;
       color: black;
       background-color: rgba(0, 0, 0, 0.5);
       //background-color: rgba(255, 255, 255, 0.5);
@@ -49,19 +50,36 @@ body {
       user-select: none;
 
       .volume {
-        cursor: pointer;
         display: flex;
         justify-content: center;
         align-items: center;
         color: $puzzle-color;
+
+        svg {
+          cursor: pointer;
+
+          &:hover {
+            //box-shadow: 0 0 5px $puzzle-color;
+            //border-radius: 50%;
+          }
+
+        }
       }
 
       .volume_Off {
-        cursor: pointer;
         display: flex;
         justify-content: center;
         align-items: center;
         color: red;
+
+        svg {
+          cursor: pointer;
+
+          &:hover {
+            //box-shadow: 0 0 5px red;
+            //border-radius: 50%;
+          }
+        }
       }
 
       .time {
@@ -111,16 +129,19 @@ body {
       }
 
       .help {
-        cursor: pointer;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: $puzzle-color;
-        //transition: color 0.5s ease-in-out;
 
-        &:hover {
-          color: red;
+        .help-icon {
+          cursor: pointer;
+          color: $puzzle-color;
+          //transition: color 0.5s ease-in-out;
+          &:hover {
+            color: red;
+          }
         }
+
       }
 
 
@@ -155,8 +176,10 @@ body {
         align-items: center;
 
         font-size: 35px;
-        font-family: Consolas, Georgia sans-serif;
-        color: black;
+        font-family: Consolas, Georgia, sans-serif;
+        //color: #b300ff;
+        color: white;
+        font-weight: 700;
         -moz-user-select: none;
         user-select: none;
 
@@ -165,6 +188,12 @@ body {
           background-color: #bee38a;
         }
       }
+
+      .empty {
+        position: relative;
+      }
+
+
     }
 
 
@@ -177,18 +206,21 @@ body {
 
 .menu {
   position: absolute;
+  margin: auto;
+  //width: 100%;
+  //height: 100%;
+  width: 45%;
+  height: 90vh;
 
-  width: 100%;
-  height: 100%;
   z-index: 1000;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.7);
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  font-family: Consolas, Georgia sans-serif;
+  font-family: Consolas, Georgia, sans-serif;
   color: red;
   font-size: 25px;
 
@@ -252,9 +284,11 @@ body {
 .win-menu {
 
   position: absolute;
-  width: 100%;
+  //width: 100%;
   //height: 600px;
-  height: 100%;
+  //height: 100%;
+  width: 45%;
+  height: 90vh;
   z-index: 1000;
   background-color: rgba(0, 0, 0, 0.8);
 
@@ -268,7 +302,7 @@ body {
   .win-menu__text {
     text-align: center;
     line-height: 150%;
-    font-family: Consolas, Georgia sans-serif;
+    font-family: Consolas, Georgia, sans-serif;
     font-size: 27px;
     display: flex;
     flex-wrap: wrap;
@@ -302,7 +336,226 @@ body {
 }
 
 
+// Saved Games Menu
 
+.savedGamesMenu {
+
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.8);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  -moz-user-select: none;
+  user-select: none;
+
+  .savedGamesMenuTitleWrapper {
+    font-size: 25px;
+    font-family: Consolas, Georgia, sans-serif;
+    color: red;
+
+    .savedGamesMenuTitle {
+
+
+      .savedGamesMenuTitleCount {
+
+      }
+    }
+  }
+
+
+  // Slider styles
+  .slider {
+
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+
+    .angle-left {
+      opacity: 0.4;
+    }
+
+    .angles {
+
+      cursor: pointer;
+      color: $puzzle-color;
+      font-size: 50px;
+    }
+
+    .screen {
+      width: 55%;
+      position: relative;
+      background-color: #0e6080;
+
+      cursor: initial;
+
+      &:after {
+        position: absolute;
+        content: '';
+        top: 0;
+        background-color: rgba(255, 255, 255, 0);
+        width: 100%;
+        height: 100%;
+      }
+
+
+      .scoreboard {
+        width: 100%;
+
+        .time {
+          font-size: 15px !important;
+        }
+
+        .volume {
+          font-size: 15px !important;
+        }
+
+        .pause {
+          font-size: 15px !important;
+        }
+
+        .moves {
+          font-size: 15px !important;
+        }
+
+        .help {
+          font-size: 15px !important;
+        }
+
+      }
+
+      .main-area {
+
+        width: 100%;
+        height: 35vh;
+        //grid-gap: 1vw;
+
+        .puzzle {
+
+        }
+      }
+    }
+
+  }
+
+  .savedGamesMenuButtonsWrapper {
+
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    .loadButton {
+
+      //margin-top: 10%;
+      width: 100px;
+      height: 35px;
+
+      cursor: pointer;
+      outline: none;
+      border: none;
+      background-color: green;
+      color: white;
+      font-size: 18px;
+      border-radius: 4px;
+
+
+      &:hover {
+        box-shadow: 0 0 5px $puzzle-color;
+      }
+
+      &:active {
+        box-shadow: 0 0 10px $puzzle-color;
+      }
+
+
+    }
+
+    .removeButton {
+
+      //margin-top: 10%;
+      width: 100px;
+      height: 35px;
+
+      cursor: pointer;
+      outline: none;
+      border: none;
+      background-color: darkred;
+      color: white;
+      font-size: 18px;
+      border-radius: 4px;
+
+
+      &:hover {
+        box-shadow: 0 0 5px #ff0000;
+      }
+
+      &:active {
+        box-shadow: 0 0 10px red;
+      }
+
+    }
+
+  }
+
+  .noSavedGamesText {
+
+    text-align: center;
+    line-height: 150%;
+    font-family: Consolas, Georgia, sans-serif;
+    font-size: 27px;
+    color: #25ff54;
+    width: 70%;
+  }
+
+  .noSavedGamesModalButton{
+
+      margin-top: 10%;
+      width: 100px;
+      height: 35px;
+
+      cursor: pointer;
+      outline: none;
+      border: none;
+      background-color: green;
+      color: white;
+      font-size: 18px;
+      border-radius: 4px;
+
+
+      &:hover {
+        box-shadow: 0 0 5px $puzzle-color;
+      }
+
+      &:active {
+        box-shadow: 0 0 10px $puzzle-color;
+      }
+    }
+
+
+}
+
+
+//backButton styles
+
+
+.backButton {
+
+  font-family: Consolas, Georgia, sans-serif;
+
+  cursor: pointer;
+  font-size: 32px;
+  color: red;
+
+  &:hover {
+    text-shadow: 0px 0px 5px red;
+  }
+}
 
 
 
