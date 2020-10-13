@@ -52,7 +52,6 @@ const gemPuzzle = {
 
         // for saved game menu
         screenShots: [],
-        puzzlesForLocalStorage: '',
         slider: '',
         angleLeft: '',
         angleRight: '',
@@ -60,6 +59,8 @@ const gemPuzzle = {
 
     },
     values: {
+        isFirstLoad: false,
+
         dimension: 4,
         moves: 0,
         timerId: '',
@@ -71,9 +72,11 @@ const gemPuzzle = {
         isAnimation: true,
         // for autoplay policy
         isMenuItemClicked: false,
+        previousRandomImageName: '',
         randomImageName: '',
         maxSavedGamesCount: 10,
 
+        isLoad: false,
         savedGames: [],
         currentScreenShotId: 0,
 
@@ -169,6 +172,7 @@ const gemPuzzle = {
 
         document.body.appendChild(this.elements.container);
 
+
         this.values.randomImageName = this.chooseRandomImage();
         this.initiateAudio();
         this.createSortedPuzzles();
@@ -179,6 +183,41 @@ const gemPuzzle = {
 
     },
 
+    loadGame() {
+
+        this.values.isLoad = true;
+
+        // this.elements.mainArea.remove();
+
+        // Update time
+        this.values.time = this.values.savedGames[this.values.currentScreenShotId].time;
+        this.values.seconds = this.values.savedGames[this.values.currentScreenShotId].seconds;
+        this.values.minutes = this.values.savedGames[this.values.currentScreenShotId].minutes;
+        this.elements.time.textContent = `Time:${this.values.time}`;
+
+
+        //Update moves
+        this.values.moves = this.values.savedGames[this.values.currentScreenShotId].moves;
+        this.elements.moves.textContent = `Moves: ${this.values.moves}`;
+
+        // background Image
+        this.values.randomImageName = this.values.savedGames[this.values.currentScreenShotId].backgroundImageName
+
+        // dimension
+        this.values.dimension = this.values.savedGames[this.values.currentScreenShotId].dimension
+
+        this.values.isPauseClicked = false;
+        this.createRandomPuzzles();
+        this.initiatePuzzles();
+        this.initiateDragNDrop();
+        this.startGame();
+
+
+        this.elements.savedGamesMenu.remove();
+
+
+        this.values.isLoad = false;
+    },
 
     openModal(text) {
         this.elements.menu.style.display = 'none'
@@ -234,12 +273,6 @@ const gemPuzzle = {
 
         if (this.values.savedGames.length !== 0) {
 
-            console.log(this.elements.screenShots.length)
-            console.log(this.values.savedGames.length )
-            console.log(this.values.currentScreenShotId)
-
-
-
             removedScreenShot.replaceWith(this.elements.screenShots[this.values.currentScreenShotId]);
 
             for (let i = 0; i < this.elements.screenShots.length; i++) {
@@ -268,7 +301,6 @@ const gemPuzzle = {
     },
 
 
-    //TODO
     toggleSlider(direction) {
 
         if (direction === 'right' && this.values.currentScreenShotId < this.values.savedGames.length - 1) {
@@ -370,16 +402,15 @@ const gemPuzzle = {
         }
 
 
-        //TODO
-        // Load and Remove buttons
-
-
         this.elements.savedGamesMenuButtonsWrapper = document.createElement('div');
         this.elements.savedGamesMenuButtonsWrapper.classList.add('savedGamesMenuButtonsWrapper');
 
         this.elements.loadButton = document.createElement('button');
         this.elements.loadButton.classList.add('loadButton');
         this.elements.loadButton.textContent = `Load`;
+        this.elements.loadButton.addEventListener('click', () => {
+            this.loadGame();
+        })
         this.elements.savedGamesMenuButtonsWrapper.appendChild(this.elements.loadButton);
 
 
@@ -438,7 +469,7 @@ const gemPuzzle = {
                         this.elements.mainArea.appendChild(el);
                     })
 
-                    this.checkPuzzlesOrder();
+                    this.checkpuzzlesIndexesOrder();
                 }
             }, 5)
 
@@ -469,7 +500,7 @@ const gemPuzzle = {
                         this.elements.mainArea.appendChild(el);
                     })
 
-                    this.checkPuzzlesOrder();
+                    this.checkpuzzlesIndexesOrder();
                 }
             }, 5)
         } else if (direction === 'right') {
@@ -499,7 +530,7 @@ const gemPuzzle = {
                         this.elements.mainArea.appendChild(el);
                     })
 
-                    this.checkPuzzlesOrder();
+                    this.checkpuzzlesIndexesOrder();
                 }
             }, 5)
         } else if (direction === 'left') {
@@ -529,7 +560,7 @@ const gemPuzzle = {
                         this.elements.mainArea.appendChild(el);
                     })
 
-                    this.checkPuzzlesOrder();
+                    this.checkpuzzlesIndexesOrder();
                 }
             }, 5)
         }
@@ -545,7 +576,7 @@ const gemPuzzle = {
     },
 
 
-    checkPuzzlesOrder() {
+    checkpuzzlesIndexesOrder() {
         if (this.elements.puzzles.every((el, ind) => Number(el.id) === ind + 1)) {
             clearInterval(this.values.timerId);
             this.elements.winMenu = document.createElement('div');
@@ -701,6 +732,7 @@ const gemPuzzle = {
         }, 1000)
     },
     startGame() {
+        this.values.previousRandomImageName = this.values.randomImageName;
         this.values.randomImageName = this.chooseRandomImage()
         this.elements.menu.remove();
         this.updateTime();
@@ -821,7 +853,7 @@ const gemPuzzle = {
         })
 
         this.elements.saveGameBtn.addEventListener('click', () => {
-            this.values.isMenuItemClicked = true
+            this.values.isMenuItemClicked = true;
             if (this.values.isVolumeOn) {
                 this.elements.audioMenuItemSelect.play();
             }
@@ -836,23 +868,28 @@ const gemPuzzle = {
 
 
                 this.elements.screenShot = this.elements.container.cloneNode(true);
-                this.elements.puzzlesForLocalStorage = this.elements.puzzles
-                    .map((el) => JSON.stringify(el.outerHTML))
+                let puzzlesIndexesOrder = this.elements.puzzles
+                    .map(el => Number(el.id) - 1)
 
 
                 this.values.savedGames = [
                     ...this.values.savedGames,
                     {
+                        time: this.values.time,
                         minutes: this.values.minutes,
-                        seconds: this.values.minutes,
+                        seconds: this.values.seconds,
                         moves: this.values.moves,
                         screenShot: this.elements.screenShot.innerHTML,
-                        puzzles: this.elements.puzzlesForLocalStorage,
+                        puzzlesIndexesOrder: puzzlesIndexesOrder,
+                        dimension: this.values.dimension,
+                        backgroundImageName: this.values.previousRandomImageName
                     }
                 ];
 
                 localStorage.removeItem('savedGames');
                 localStorage.setItem('savedGames', JSON.stringify(gemPuzzle.values.savedGames));
+
+                this.openModal(`The game was saved successfully`)
 
             } else {
                 this.openModal(`Max saved games count should not exceed ${this.values.maxSavedGamesCount}`)
@@ -1094,7 +1131,7 @@ const gemPuzzle = {
             }
 
 
-            gemPuzzle.checkPuzzlesOrder();
+            gemPuzzle.checkpuzzlesIndexesOrder();
 
         }
 
@@ -1167,7 +1204,7 @@ const gemPuzzle = {
 
 
             if (!this.values.isAnimation) {
-                this.checkPuzzlesOrder();
+                this.checkpuzzlesIndexesOrder();
             }
 
 
@@ -1199,6 +1236,10 @@ const gemPuzzle = {
             }
         }
 
+        if (this.values.isLoad) {
+            randomIndexes = this.values.savedGames[this.values.currentScreenShotId].puzzlesIndexesOrder
+        }
+
         // Second cycle for clarification and visibility
         //create elements in different places
         for (let i = 0; i < randomIndexes.length; i++) {
@@ -1210,8 +1251,10 @@ const gemPuzzle = {
             } else {
                 this.elements.puzzles[i].classList.add('puzzle');
                 this.elements.puzzles[i].id = randomIndexes[i] + 1;
+
                 //TODO
                 this.elements.puzzles[i].textContent = randomIndexes[i] + 1;
+
 
                 // Image assemble
                 this.elements.puzzles[i].style.backgroundImage = `url('src/assets/images/puzzle-images/${this.values.randomImageName}.jpg')`;
@@ -1260,6 +1303,9 @@ const gemPuzzle = {
 
 
 window.onload = () => {
-    gemPuzzle.init();
+    if (!gemPuzzle.values.isFirstLoad) {
+        gemPuzzle.init();
+        gemPuzzle.values.isFirstLoad = true;
+    }
 
 }
