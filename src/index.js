@@ -25,6 +25,7 @@ const gemPuzzle = {
         savedGamesBtn: '',
         bestScoresBtn: '',
         rulesGameBtn: '',
+        clearBestScoresBtn: '',
         soundBtn: '',
         settingsBtn: '',
 
@@ -33,6 +34,10 @@ const gemPuzzle = {
         savedGamesMenuButtonsWrapper: '',
         loadButton: '',
         removeButton: '',
+
+        bestScoresMenu: '',
+        rulesMenu: '',
+        settingsMenu: '',
 
         backButton: '',
         winMenu: '',
@@ -61,7 +66,7 @@ const gemPuzzle = {
     values: {
         isFirstLoad: false,
 
-        dimension: 4,
+        dimension: 3,
         moves: 0,
         timerId: '',
         time: `00:00`,
@@ -75,9 +80,11 @@ const gemPuzzle = {
         previousRandomImageName: '',
         randomImageName: '',
         maxSavedGamesCount: 10,
+        maxBestScoresCount: 10,
 
         isLoad: false,
         savedGames: [],
+        bestScores: [],
         currentScreenShotId: 0,
 
     },
@@ -180,6 +187,341 @@ const gemPuzzle = {
         this.initiateDragNDrop();
         this.openMenu();
         // keyElement.classList.toggle("someClass", this.bool);
+
+    },
+
+    //TODO
+    saveSettings(){
+
+        alert('hi')
+
+    },
+
+
+    openSettingsMenu() {
+        this.elements.menu.style.display = 'none';
+
+        this.elements.settingsMenu = document.createElement('div');
+        this.elements.settingsMenu.classList.add('settingsMenu');
+
+
+        let settingsMenuTitle = document.createElement('h3');
+        settingsMenuTitle.classList.add('settingsMenuTitle');
+        settingsMenuTitle.textContent = 'Settings';
+
+        let boardSizeWrapper = document.createElement('div');
+        boardSizeWrapper.classList.add('boardSizeWrapper');
+        let boardSizeText = document.createElement('p');
+        boardSizeText.classList.add('boardSizeText');
+        boardSizeText.textContent = 'Board Size';
+        let boardSizeSelect = document.createElement('select');
+        boardSizeSelect.classList.add('boardSizeSelect');
+
+        let option1 = document.createElement('option');
+        option1.classList.add('option');
+        option1.textContent = '3x3';
+        let option2 = document.createElement('option');
+        option2.classList.add('option');
+        option2.textContent = '4x4';
+        option2.setAttribute('selected', '');
+        let option3 = document.createElement('option');
+        option3.classList.add('option');
+        option3.textContent = '5x5';
+        let option4 = document.createElement('option');
+        option4.classList.add('option');
+        option4.textContent = '6x6';
+        let option5 = document.createElement('option');
+        option5.classList.add('option');
+        option5.textContent = '7x7';
+        let option6 = document.createElement('option');
+        option6.classList.add('option');
+        option6.textContent = '8x8';
+
+        boardSizeWrapper.appendChild(boardSizeText);
+        boardSizeSelect.appendChild(option1);
+        boardSizeSelect.appendChild(option2);
+        boardSizeSelect.appendChild(option3);
+        boardSizeSelect.appendChild(option4);
+        boardSizeSelect.appendChild(option5);
+        boardSizeSelect.appendChild(option6);
+        boardSizeWrapper.appendChild(boardSizeSelect);
+
+
+        let moveAnimationWrapper = document.createElement('div');
+        moveAnimationWrapper.classList.add('moveAnimationWrapper');
+        let moveAnimationText = document.createElement('p');
+        moveAnimationText.classList.add('moveAnimationText');
+        moveAnimationText.textContent = 'Move Animation';
+
+        let moveAnimationLabel = document.createElement('label');
+        moveAnimationLabel.classList.add('switch');
+        let moveAnimationCheckbox = document.createElement('input');
+        moveAnimationCheckbox.type = 'checkbox';
+        moveAnimationCheckbox.classList.add('checkbox');
+        moveAnimationCheckbox.setAttribute('checked', '');
+        let moveAnimationSpan = document.createElement('span');
+        moveAnimationSpan.classList.add('slider', 'round');
+        moveAnimationLabel.appendChild(moveAnimationCheckbox)
+        moveAnimationLabel.appendChild(moveAnimationSpan)
+
+        moveAnimationWrapper.appendChild(moveAnimationText);
+        moveAnimationWrapper.appendChild(moveAnimationLabel);
+
+        let difficultyWrapper = document.createElement('div');
+        difficultyWrapper.classList.add('difficultyWrapper');
+
+        let difficultyText = document.createElement('p');
+        difficultyText.classList.add('difficultyText');
+        difficultyText.textContent = 'Difficulty';
+
+        let difficultySelect = document.createElement('select');
+        difficultySelect.classList.add('difficultySelect');
+        let difficultyOption1 = document.createElement('option');
+        difficultyOption1.classList.add('option');
+        difficultyOption1.textContent = 'Digits';
+        let difficultyOption2 = document.createElement('option');
+        difficultyOption2.classList.add('option');
+        difficultyOption2.textContent = 'Picture with digits';
+        let difficultyOption3 = document.createElement('option');
+        difficultyOption3.classList.add('option');
+        difficultyOption3.textContent = 'Picture only';
+
+        difficultySelect.appendChild(difficultyOption1);
+        difficultySelect.appendChild(difficultyOption2);
+        difficultySelect.appendChild(difficultyOption3);
+        difficultyWrapper.appendChild(difficultyText);
+        difficultyWrapper.appendChild(difficultySelect);
+
+        let saveBtn = document.createElement('button');
+        saveBtn.classList.add('saveBtn');
+        saveBtn.textContent = 'Save';
+        saveBtn.addEventListener('click', () => {
+            this.saveSettings();
+        })
+
+
+        this.elements.backButton = document.createElement('h3');
+        this.elements.backButton.classList.add('backButton');
+        this.elements.backButton.textContent = 'Back';
+        this.elements.backButton.addEventListener('click', () => {
+            this.backToMenu(this.elements.settingsMenu);
+        })
+
+
+        this.elements.settingsMenu.appendChild(settingsMenuTitle);
+        this.elements.settingsMenu.appendChild(boardSizeWrapper);
+        this.elements.settingsMenu.appendChild(moveAnimationWrapper);
+        this.elements.settingsMenu.appendChild(difficultyWrapper);
+        this.elements.settingsMenu.appendChild(saveBtn);
+        this.elements.settingsMenu.appendChild(this.elements.backButton);
+        this.elements.container.appendChild(this.elements.settingsMenu);
+
+
+    },
+
+    openRulesMenu() {
+        this.elements.menu.style.display = 'none';
+
+
+        this.elements.rulesMenu = document.createElement('div');
+        this.elements.rulesMenu.classList.add('rulesMenu');
+
+        let rulesMenuTitle = document.createElement('h3');
+        rulesMenuTitle.classList.add('rulesMenuTitle');
+        rulesMenuTitle.textContent = 'Game Rules';
+
+        //Content
+        const content = document.createElement('div');
+        content.classList.add('content');
+
+        const mainText = document.createElement('p');
+        mainText.classList.add('mainText');
+        mainText.textContent = 'The goal of the puzzle game is to place the puzzles (tiles) in order by making sliding moves that use the empty space.';
+
+        const p1 = document.createElement('p');
+        p1.classList.add('p1');
+        p1.textContent = '1. You can enter the menu by pressing the "Pause" button.';
+
+        const p2 = document.createElement('p');
+        p2.classList.add('p2');
+        p2.textContent = '2. You can Save your game and Load it later. (Max count is 10). Also you can remove the game.';
+
+        const p3 = document.createElement('p');
+        p3.classList.add('p3');
+        p3.textContent = '3. You can see the top 10 results in "Best Scores" menu.';
+
+
+        const p4 = document.createElement('p');
+        p4.classList.add('p4');
+        p4.textContent = '4. You can choose puzzle board size (from 3x3 to 8x8) in "Settings" menu.';
+
+        const p5 = document.createElement('p');
+        p5.classList.add('p5');
+        p5.textContent = '5. You can turn off puzzles move animation in "Settings" menu.';
+
+        const p6 = document.createElement('p');
+        p6.classList.add('p6');
+        p6.textContent = '6. You can choose type of puzzles in "Settings" menu (3 different levels).';
+
+        const p7 = document.createElement('p');
+        p7.classList.add('p7');
+        p7.textContent = '7. You can configure sound in "Sounds" menu or you can turn off sound in Main panel.';
+
+        const p8 = document.createElement('p');
+        p8.classList.add('p8');
+        p8.textContent = '8. If you choose "Only picture" mode  you can click on "Question" icon in Main panel and see full image which you need to have.';
+
+        const p9 = document.createElement('p');
+        p9.classList.add('p9');
+        p9.textContent = '9. If you don\'t know how to place puzzles in order -  You can "Finish" game and see how puzzles move to their positions with animation.';
+
+        const p10 = document.createElement('p');
+        p10.classList.add('p10');
+        p10.textContent = '10. If you win you can see congratulations text and listen enjoyable melody.';
+
+
+        content.appendChild(mainText);
+        content.appendChild(p1);
+        content.appendChild(p2);
+        content.appendChild(p3);
+        content.appendChild(p4);
+        content.appendChild(p5);
+        content.appendChild(p6);
+        content.appendChild(p7);
+        content.appendChild(p8);
+        content.appendChild(p9);
+        content.appendChild(p10);
+
+        this.elements.backButton = document.createElement('h3');
+        this.elements.backButton.classList.add('backButton');
+        this.elements.backButton.textContent = 'Back';
+        this.elements.backButton.addEventListener('click', () => {
+            this.backToMenu(this.elements.rulesMenu);
+        })
+
+
+        this.elements.rulesMenu.appendChild(rulesMenuTitle);
+        this.elements.rulesMenu.appendChild(content);
+        this.elements.rulesMenu.appendChild(this.elements.backButton);
+        this.elements.container.appendChild(this.elements.rulesMenu);
+
+
+    },
+
+    backToMenu(currentMenu) {
+
+        currentMenu.remove();
+        this.elements.menu.style.display = 'flex';
+        // this.openMenu();
+    },
+
+    openBestScoresMenu() {
+
+        // Take best scores from local storage
+        let bestScores = JSON.parse(localStorage.getItem('bestScores'))
+
+        if (bestScores) {
+            this.values.bestScores = bestScores
+        }
+
+
+        // Create best scores Menu
+        this.elements.menu.style.display = 'none'
+
+
+        this.elements.bestScoresMenu = document.createElement('div');
+        this.elements.bestScoresMenu.classList.add('bestScoresMenu');
+
+        let bestScoresMenuTitle = document.createElement('h3');
+        bestScoresMenuTitle.classList.add('bestScoresMenuTitle');
+        bestScoresMenuTitle.textContent = 'Best Scores'
+
+        let bestScoresMenuGrid = document.createElement('div');
+        bestScoresMenuGrid.classList.add('bestScoresMenuGrid');
+
+        let bestScoresMenuGridID = document.createElement('div');
+        bestScoresMenuGridID.classList.add('bestScoresMenuGridID');
+        bestScoresMenuGridID.textContent = 'Id'
+        let bestScoresMenuGridBoardSize = document.createElement('div');
+        bestScoresMenuGridBoardSize.classList.add('bestScoresMenuGridBoardSize');
+        bestScoresMenuGridBoardSize.textContent = 'Size'
+        let bestScoresMenuGridTime = document.createElement('div');
+        bestScoresMenuGridTime.classList.add('bestScoresMenuGridTime');
+        bestScoresMenuGridTime.textContent = 'Time'
+        let bestScoresMenuGridMoves = document.createElement('div');
+        bestScoresMenuGridMoves.classList.add('bestScoresMenuGridMoves');
+        bestScoresMenuGridMoves.textContent = 'Moves'
+
+        this.elements.clearBestScoresBtn = document.createElement('button');
+        this.elements.clearBestScoresBtn.classList.add('clearBestScoresBtn');
+        this.elements.clearBestScoresBtn.textContent = `Clear all`;
+        this.elements.clearBestScoresBtn.addEventListener('click', () => {
+            localStorage.removeItem('bestScores');
+            this.values.bestScores = [];
+            this.elements.bestScoresMenu.remove();
+            this.openBestScoresMenu();
+        })
+
+        this.elements.backButton = document.createElement('h3');
+        this.elements.backButton.classList.add('backButton');
+        this.elements.backButton.textContent = 'Back';
+        this.elements.backButton.addEventListener('click', () => {
+            this.backToMenu(this.elements.bestScoresMenu);
+        })
+
+
+        bestScoresMenuGrid.appendChild(bestScoresMenuGridID);
+        bestScoresMenuGrid.appendChild(bestScoresMenuGridBoardSize);
+        bestScoresMenuGrid.appendChild(bestScoresMenuGridTime);
+        bestScoresMenuGrid.appendChild(bestScoresMenuGridMoves);
+        this.elements.bestScoresMenu.appendChild(bestScoresMenuTitle);
+        this.elements.bestScoresMenu.appendChild(bestScoresMenuGrid);
+        this.elements.bestScoresMenu.appendChild(this.elements.clearBestScoresBtn);
+        this.elements.bestScoresMenu.appendChild(this.elements.backButton);
+        this.elements.container.appendChild(this.elements.bestScoresMenu);
+
+
+        // Render data from local storage in Menu
+
+        if (this.values.bestScores.length) {
+
+            for (let i = 0; i < this.values.bestScores.length; i++) {
+
+                let id = document.createElement('div');
+                id.classList.add('bestScoresMenuGridID');
+                id.textContent = `${i + 1}`
+                let size = document.createElement('div');
+                size.classList.add('bestScoresMenuGridBoardSize');
+                size.textContent = `${this.values.bestScores[i].boardSize}x${this.values.bestScores[i].boardSize}`
+                let time = document.createElement('div');
+                time.classList.add('bestScoresMenuGridTime');
+                time.textContent = `${this.values.bestScores[i].time}`;
+                let moves = document.createElement('div');
+                moves.classList.add('bestScoresMenuGridMoves');
+                moves.textContent = `${this.values.bestScores[i].movesCount}`;
+
+                let grid = document.querySelector('.bestScoresMenuGrid')
+
+                grid.appendChild(id);
+                grid.appendChild(size);
+                grid.appendChild(time);
+                grid.appendChild(moves);
+                this.elements.bestScoresMenu.appendChild(bestScoresMenuGrid);
+            }
+
+            bestScoresMenuGrid.style.gridTemplateRows = `repeat(${this.values.bestScores.length + 1}, 1fr)`
+        } else {
+            // bestScoresMenuGrid.style.gridTemplateRows = `repeat(${1}, 1fr)`;
+            // bestScoresMenuGrid.style.display = 'none';
+            // this.elements.clearBestScoresBtn.style.display = 'none';
+            // let noResults = document.createElement('h3');
+            // noResults.classList.add('noResults');
+            // noResults.textContent = `No Results`;
+            // this.elements.bestScoresMenu.appendChild(noResults);
+
+            this.elements.bestScoresMenu.remove();
+            this.openModal('You don\'t have any results yet')
+        }
 
     },
 
@@ -427,6 +769,10 @@ const gemPuzzle = {
         this.elements.backButton = document.createElement('h3');
         this.elements.backButton.classList.add('backButton');
         this.elements.backButton.textContent = 'Back';
+        this.elements.backButton.addEventListener('click', () => {
+            this.backToMenu(this.elements.savedGamesMenu);
+        })
+
 
         this.elements.savedGamesMenu.appendChild(this.elements.slider);
         this.elements.savedGamesMenu.appendChild(this.elements.savedGamesMenuButtonsWrapper);
@@ -450,7 +796,7 @@ const gemPuzzle = {
                     this.elements.puzzles[shiftedElementIndex].style.bottom = `${i}px`;
                     this.elements.puzzles[emptyElementIndex].style.top = `${i}px`;
                     // Animation step
-                    i++;
+                    i += 2;
 
                 } else {
                     clearInterval(timerId)
@@ -481,7 +827,7 @@ const gemPuzzle = {
                     this.elements.puzzles[shiftedElementIndex].style.top = `${i}px`;
                     this.elements.puzzles[emptyElementIndex].style.bottom = `${i}px`;
                     // Animation step
-                    i++;
+                    i += 2;
 
                 } else {
                     clearInterval(timerId)
@@ -511,7 +857,7 @@ const gemPuzzle = {
                     this.elements.puzzles[shiftedElementIndex].style.left = `${i}px`;
                     this.elements.puzzles[emptyElementIndex].style.right = `${i}px`;
                     // Animation step
-                    i++;
+                    i += 2;
 
                 } else {
                     clearInterval(timerId)
@@ -541,7 +887,7 @@ const gemPuzzle = {
                     this.elements.puzzles[shiftedElementIndex].style.right = `${i}px`;
                     this.elements.puzzles[emptyElementIndex].style.left = `${i}px`;
                     // Animation step
-                    i++;
+                    i += 2;
 
                 } else {
                     clearInterval(timerId)
@@ -596,6 +942,61 @@ const gemPuzzle = {
             if (this.values.isVolumeOn) {
                 this.elements.audioWin.play()
             }
+
+
+            // Best Scores record
+            let bestScores = JSON.parse(localStorage.getItem('bestScores'))
+
+            if (bestScores) {
+                this.values.bestScores = bestScores
+            }
+
+
+            if (this.values.bestScores.length === this.values.maxBestScoresCount) {
+
+                let movesCountArray = this.values.bestScores.map(el => el.movesCount)
+                let worstResult = Math.max(...movesCountArray)
+                let worstResultIndex = this.values.bestScores.findIndex(el => el.movesCount === worstResult)
+
+
+                if (this.values.moves < this.values.bestScores[worstResultIndex].movesCount) {
+                    this.values.bestScores[worstResultIndex] =
+                        {
+                            time: this.values.time,
+                            movesCount: this.values.moves,
+                            boardSize: this.values.dimension,
+                        }
+                }
+
+
+            } else if (this.values.bestScores.length < this.values.maxBestScoresCount) {
+
+                this.values.bestScores = [
+                    ...this.values.bestScores,
+                    {
+                        time: this.values.time,
+                        movesCount: this.values.moves,
+                        boardSize: this.values.dimension,
+                    }
+                ]
+
+            }
+
+            // Sort by moves count
+            for (let i = 0; i < this.values.bestScores.length - 1; i++) {
+                for (let j = 0; j < this.values.bestScores.length - 1 - i; j++) {
+                    if (this.values.bestScores[j].movesCount > this.values.bestScores[j + 1].movesCount) {
+                        let extra = this.values.bestScores[j].movesCount;
+                        this.values.bestScores[j].movesCount = this.values.bestScores[j + 1].movesCount;
+                        this.values.bestScores[j + 1].movesCount = extra;
+                    }
+
+                }
+            }
+
+            localStorage.removeItem('bestScores');
+            localStorage.setItem('bestScores', JSON.stringify(this.values.bestScores));
+
 
             winMenuBtn.addEventListener('click', () => {
                 this.elements.winMenu.remove();
@@ -931,10 +1332,13 @@ const gemPuzzle = {
 
         })
         this.elements.bestScoresBtn.addEventListener('click', () => {
-            this.values.isMenuItemClicked = true
+            this.values.isMenuItemClicked = true;
             if (this.values.isVolumeOn) {
                 this.elements.audioMenuItemSelect.play();
             }
+
+            this.openBestScoresMenu();
+
         })
 
         this.elements.rulesGameBtn = document.createElement("h3");
@@ -953,6 +1357,8 @@ const gemPuzzle = {
             if (this.values.isVolumeOn) {
                 this.elements.audioMenuItemSelect.play();
             }
+
+            this.openRulesMenu();
         })
 
         this.elements.settingsBtn = document.createElement("h3");
@@ -964,14 +1370,14 @@ const gemPuzzle = {
             if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
                 this.elements.audioMenuItemHover.play();
             }
-
-        })
+        });
         this.elements.settingsBtn.addEventListener('click', () => {
             this.values.isMenuItemClicked = true
             if (this.values.isVolumeOn) {
                 this.elements.audioMenuItemSelect.play();
             }
-        })
+            this.openSettingsMenu();
+        });
 
 
         this.elements.soundBtn = document.createElement("h3");
@@ -1006,7 +1412,6 @@ const gemPuzzle = {
         this.elements.menu.appendChild(this.elements.soundBtn);
         this.elements.menu.appendChild(this.elements.settingsBtn);
 
-        // TODO: check it out: affect on menu behavior or not
         //  this.elements.container.appendChild(this.elements.menu);
         document.body.appendChild(this.elements.menu);
     },
