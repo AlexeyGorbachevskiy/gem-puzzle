@@ -1472,8 +1472,7 @@ const gemPuzzle = {
         this.elements.newGameBtn.addEventListener('mouseover', () => {
             // && this.values.isPauseClicked -> this validation is done for browser autoplay policy
             // (user need to interact with domain before listen  audio)
-            //if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
-            if (this.values.isVolumeOn) {
+            if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
                 this.elements.audioMenuItemHover.play();
                 // let promise = this.elements.audioMenuItemHover.play();
                 // if (promise !== undefined) {
@@ -1601,8 +1600,7 @@ const gemPuzzle = {
         this.elements.savedGamesBtn.addEventListener('mouseover', () => {
             // && this.values.isMenuItemClicked -> this validation is done for browser autoplay policy
             // (user need to interact with domain before listen  audio)
-            //if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
-            if (this.values.isVolumeOn) {
+            if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
                 this.elements.audioMenuItemHover.play();
             }
 
@@ -1622,8 +1620,7 @@ const gemPuzzle = {
         this.elements.bestScoresBtn.addEventListener('mouseover', () => {
             // && this.values.isMenuItemClicked -> this validation is done for browser autoplay policy
             // (user need to interact with domain before listen  audio)
-            //if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
-            if (this.values.isVolumeOn) {
+            if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
                 this.elements.audioMenuItemHover.play();
             }
 
@@ -1644,8 +1641,7 @@ const gemPuzzle = {
         this.elements.rulesGameBtn.addEventListener('mouseover', () => {
             // && this.values.isMenuItemClicked -> this validation is done for browser autoplay policy
             // (user need to interact with domain before listen  audio)
-            //if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
-            if (this.values.isVolumeOn) {
+            if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
                 this.elements.audioMenuItemHover.play();
             }
 
@@ -1665,8 +1661,7 @@ const gemPuzzle = {
         this.elements.settingsBtn.addEventListener('mouseover', () => {
             // && this.values.isMenuItemClicked -> this validation is done for browser autoplay policy
             // (user need to interact with domain before listen  audio)
-            // if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
-            if (this.values.isVolumeOn) {
+            if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
                 this.elements.audioMenuItemHover.play();
             }
         });
