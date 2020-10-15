@@ -26,7 +26,6 @@ const gemPuzzle = {
         bestScoresBtn: '',
         rulesGameBtn: '',
         clearBestScoresBtn: '',
-        soundBtn: '',
         settingsBtn: '',
 
         savedGamesMenu: '',
@@ -38,6 +37,9 @@ const gemPuzzle = {
         bestScoresMenu: '',
         rulesMenu: '',
         settingsMenu: '',
+        boardSizeSelect: '',
+        moveAnimationCheckbox: '',
+        difficultySelect: '',
 
         backButton: '',
         winMenu: '',
@@ -66,14 +68,14 @@ const gemPuzzle = {
     values: {
         isFirstLoad: false,
 
-        dimension: 3,
+        dimension: 4,
         moves: 0,
         timerId: '',
         time: `00:00`,
         minutes: 0,
         seconds: 0,
         isPauseClicked: false,
-        isVolumeOn: false,
+        isVolumeOn: true,
         isAnimation: true,
         // for autoplay policy
         isMenuItemClicked: false,
@@ -86,7 +88,7 @@ const gemPuzzle = {
         savedGames: [],
         bestScores: [],
         currentScreenShotId: 0,
-
+        difficulty: 3,
     },
 
     init() {
@@ -129,13 +131,16 @@ const gemPuzzle = {
             this.openMenu()
         })
 
+
         // Volume
         this.elements.volume = document.createElement('div');
         this.elements.volume.classList.add('volume');
         this.elements.volume.innerHTML = '<i class="fas fa-volume-up"></i>'
         this.elements.volume.addEventListener('click', () => {
 
+
             if (this.elements.volume.className === 'volume') {
+                this.elements.audioMenuItemSelect.play();
                 this.elements.audioMainTheme.volume = 0;
                 this.values.isVolumeOn = false;
                 this.elements.volume.classList.remove('volume');
@@ -156,6 +161,13 @@ const gemPuzzle = {
         this.elements.help = document.createElement('div');
         this.elements.help.classList.add('help');
         this.elements.help.innerHTML = '<i class="fas fa-question-circle help-icon"></i>';
+        this.elements.help.addEventListener('click', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play();
+            }
+            this.openHelpMenu();
+        });
+
 
         // Moves
         this.elements.moves = document.createElement('div');
@@ -170,6 +182,8 @@ const gemPuzzle = {
         this.elements.scoreboard.appendChild(this.elements.help);
         this.elements.container.appendChild(this.elements.scoreboard);
 
+
+        this.checkSettings();
 
         //Create main area for puzzles
         this.elements.mainArea = document.createElement("div");
@@ -190,15 +204,125 @@ const gemPuzzle = {
 
     },
 
-    //TODO
-    saveSettings(){
+    openHelpMenu() {
+        if (this.values.isVolumeOn) {
+            this.elements.audioMenuItemSelect.play();
+            this.elements.audioMenu.play();
+            this.elements.audioMainTheme.pause();
+            this.elements.audioMainTheme.currentTime = 0;
+        }
+        clearInterval(this.values.timerId)
+        this.values.isPauseClicked = true;
 
-        alert('hi')
+
+        let helpMenu = document.createElement('div');
+        helpMenu.classList.add('helpMenu');
+
+        let helpMenuTitle = document.createElement('h3');
+        helpMenuTitle.classList.add('helpMenuTitle');
+        helpMenuTitle.textContent = 'Help';
+        helpMenu.appendChild(helpMenuTitle);
+
+        let helpText = document.createElement('h3');
+        helpText.classList.add('helpText');
+        helpText.textContent = 'You need to place the puzzles (tiles) in order as shown on the image below.'
+        helpMenu.appendChild(helpText);
+
+        let helpImage = document.createElement('div');
+        helpImage.classList.add('helpImage');
+
+        if (this.values.difficulty === 2 || this.values.difficulty === 3) {
+            helpImage.style.backgroundImage = `url(src/assets/images/puzzle-images/${this.values.previousRandomImageName}.jpg)`
+        } else if (this.values.difficulty === 1) {
+            helpImage.style.backgroundImage = `url(src/assets/images/digits-${this.values.dimension}.png)`
+        }
+
+        helpMenu.appendChild(helpImage);
+
+
+        const okBtn = document.createElement('button');
+        okBtn.classList.add('okBtn');
+        okBtn.textContent = 'Ok';
+        helpMenu.appendChild(okBtn);
+
+        this.elements.container.appendChild(helpMenu);
+
+        okBtn.addEventListener('click', () => {
+            this.values.isPauseClicked = false;
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play()
+                this.elements.audioMenu.pause();
+                this.elements.audioMenu.currentTime = 0;
+                this.elements.audioMainTheme.play();
+            }
+            helpMenu.remove();
+            this.updateTime();
+        })
+
+        okBtn.addEventListener('mouseover', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemHover.play();
+            }
+        });
+    },
+
+    resetSettings() {
+
+        localStorage.removeItem('settings');
+
+        this.values.dimension = 4;
+        this.values.isAnimation = true;
+        this.values.difficulty = 3;
+        this.elements.settingsMenu.remove();
+        this.openSettingsMenu();
+        this.saveSettings();
+
+    },
+
+    saveSettings() {
+        this.values.dimension = Number(this.elements.boardSizeSelect.value.slice(0, 1));
+        this.values.isAnimation = this.elements.moveAnimationCheckbox.checked;
+
+
+        if (this.elements.difficultySelect.value === 'Digits') {
+            this.values.difficulty = 1;
+        } else if (this.elements.difficultySelect.value === 'Picture with digits') {
+            this.values.difficulty = 2;
+        } else if (this.elements.difficultySelect.value === 'Picture only') {
+            this.values.difficulty = 3;
+        }
+
+        localStorage.setItem('settings',
+            JSON.stringify({
+                dimension: this.values.dimension,
+                isAnimation: this.values.isAnimation,
+                difficulty: this.values.difficulty,
+            }))
+
+
+        document.body.innerHTML = '';
+        this.elements.settingsMenu.remove();
+        this.values.isPauseClicked = false;
+        this.values.isVolumeOn = true;
+        this.init();
+        this.openModal('Settings are successfully applied');
+    },
+
+
+    checkSettings() {
+        let settingsFromLocalStorage = JSON.parse(localStorage.getItem('settings'));
+
+        if (settingsFromLocalStorage) {
+            this.values.dimension = settingsFromLocalStorage.dimension;
+            this.values.isAnimation = settingsFromLocalStorage.isAnimation;
+            this.values.difficulty = settingsFromLocalStorage.difficulty;
+        }
 
     },
 
 
     openSettingsMenu() {
+
         this.elements.menu.style.display = 'none';
 
         this.elements.settingsMenu = document.createElement('div');
@@ -214,8 +338,8 @@ const gemPuzzle = {
         let boardSizeText = document.createElement('p');
         boardSizeText.classList.add('boardSizeText');
         boardSizeText.textContent = 'Board Size';
-        let boardSizeSelect = document.createElement('select');
-        boardSizeSelect.classList.add('boardSizeSelect');
+        this.elements.boardSizeSelect = document.createElement('select');
+        this.elements.boardSizeSelect.classList.add('boardSizeSelect');
 
         let option1 = document.createElement('option');
         option1.classList.add('option');
@@ -223,7 +347,6 @@ const gemPuzzle = {
         let option2 = document.createElement('option');
         option2.classList.add('option');
         option2.textContent = '4x4';
-        option2.setAttribute('selected', '');
         let option3 = document.createElement('option');
         option3.classList.add('option');
         option3.textContent = '5x5';
@@ -237,14 +360,23 @@ const gemPuzzle = {
         option6.classList.add('option');
         option6.textContent = '8x8';
 
+
         boardSizeWrapper.appendChild(boardSizeText);
-        boardSizeSelect.appendChild(option1);
-        boardSizeSelect.appendChild(option2);
-        boardSizeSelect.appendChild(option3);
-        boardSizeSelect.appendChild(option4);
-        boardSizeSelect.appendChild(option5);
-        boardSizeSelect.appendChild(option6);
-        boardSizeWrapper.appendChild(boardSizeSelect);
+        this.elements.boardSizeSelect.appendChild(option1);
+        this.elements.boardSizeSelect.appendChild(option2);
+        this.elements.boardSizeSelect.appendChild(option3);
+        this.elements.boardSizeSelect.appendChild(option4);
+        this.elements.boardSizeSelect.appendChild(option5);
+        this.elements.boardSizeSelect.appendChild(option6);
+        boardSizeWrapper.appendChild(this.elements.boardSizeSelect);
+
+
+        let boardSizeOptionValue = `${this.values.dimension}x${this.values.dimension}`;
+        for (let i = 0; i < this.elements.boardSizeSelect.options.length; i++) {
+            if (this.elements.boardSizeSelect.options[i].value === boardSizeOptionValue) {
+                this.elements.boardSizeSelect.options[i].setAttribute('selected', '');
+            }
+        }
 
 
         let moveAnimationWrapper = document.createElement('div');
@@ -255,17 +387,19 @@ const gemPuzzle = {
 
         let moveAnimationLabel = document.createElement('label');
         moveAnimationLabel.classList.add('switch');
-        let moveAnimationCheckbox = document.createElement('input');
-        moveAnimationCheckbox.type = 'checkbox';
-        moveAnimationCheckbox.classList.add('checkbox');
-        moveAnimationCheckbox.setAttribute('checked', '');
+        this.elements.moveAnimationCheckbox = document.createElement('input');
+        this.elements.moveAnimationCheckbox.type = 'checkbox';
+        this.elements.moveAnimationCheckbox.classList.add('checkbox');
+        this.elements.moveAnimationCheckbox.setAttribute('checked', '');
         let moveAnimationSpan = document.createElement('span');
         moveAnimationSpan.classList.add('slider', 'round');
-        moveAnimationLabel.appendChild(moveAnimationCheckbox)
+        moveAnimationLabel.appendChild(this.elements.moveAnimationCheckbox)
         moveAnimationLabel.appendChild(moveAnimationSpan)
 
         moveAnimationWrapper.appendChild(moveAnimationText);
         moveAnimationWrapper.appendChild(moveAnimationLabel);
+
+        this.elements.moveAnimationCheckbox.checked = this.values.isAnimation;
 
         let difficultyWrapper = document.createElement('div');
         difficultyWrapper.classList.add('difficultyWrapper');
@@ -274,8 +408,8 @@ const gemPuzzle = {
         difficultyText.classList.add('difficultyText');
         difficultyText.textContent = 'Difficulty';
 
-        let difficultySelect = document.createElement('select');
-        difficultySelect.classList.add('difficultySelect');
+        this.elements.difficultySelect = document.createElement('select');
+        this.elements.difficultySelect.classList.add('difficultySelect');
         let difficultyOption1 = document.createElement('option');
         difficultyOption1.classList.add('option');
         difficultyOption1.textContent = 'Digits';
@@ -286,25 +420,81 @@ const gemPuzzle = {
         difficultyOption3.classList.add('option');
         difficultyOption3.textContent = 'Picture only';
 
-        difficultySelect.appendChild(difficultyOption1);
-        difficultySelect.appendChild(difficultyOption2);
-        difficultySelect.appendChild(difficultyOption3);
+        this.elements.difficultySelect.appendChild(difficultyOption1);
+        this.elements.difficultySelect.appendChild(difficultyOption2);
+        this.elements.difficultySelect.appendChild(difficultyOption3);
         difficultyWrapper.appendChild(difficultyText);
-        difficultyWrapper.appendChild(difficultySelect);
+        difficultyWrapper.appendChild(this.elements.difficultySelect);
+
+
+        for (let i = 0; i < this.elements.difficultySelect.options.length; i++) {
+            if (this.values.difficulty === 1) {
+                this.elements.difficultySelect.options[0].setAttribute('selected', '');
+            } else if (this.values.difficulty === 2) {
+                this.elements.difficultySelect.options[1].setAttribute('selected', '');
+            } else if (this.values.difficulty === 3) {
+                this.elements.difficultySelect.options[2].setAttribute('selected', '');
+            }
+        }
+
+        let buttonsWrapper = document.createElement('div');
+        buttonsWrapper.classList.add('buttonsWrapper');
+
 
         let saveBtn = document.createElement('button');
         saveBtn.classList.add('saveBtn');
         saveBtn.textContent = 'Save';
+
         saveBtn.addEventListener('click', () => {
-            this.saveSettings();
-        })
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play();
+            }
+            setTimeout(() => {
+                this.saveSettings();
+            }, 500)
+
+        });
+        saveBtn.addEventListener('mouseover', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemHover.play();
+            }
+        });
+
+        let resetBtn = document.createElement('button');
+        resetBtn.classList.add('resetBtn');
+        resetBtn.textContent = 'Reset';
+        resetBtn.addEventListener('click', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play();
+            }
+            setTimeout(() => {
+                this.resetSettings();
+            }, 500)
+
+        });
+        resetBtn.addEventListener('mouseover', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemHover.play();
+            }
+        });
+
+        buttonsWrapper.appendChild(saveBtn);
+        buttonsWrapper.appendChild(resetBtn);
 
 
         this.elements.backButton = document.createElement('h3');
         this.elements.backButton.classList.add('backButton');
         this.elements.backButton.textContent = 'Back';
         this.elements.backButton.addEventListener('click', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play();
+            }
             this.backToMenu(this.elements.settingsMenu);
+        })
+        this.elements.backButton.addEventListener('mouseover', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemHover.play();
+            }
         })
 
 
@@ -312,12 +502,13 @@ const gemPuzzle = {
         this.elements.settingsMenu.appendChild(boardSizeWrapper);
         this.elements.settingsMenu.appendChild(moveAnimationWrapper);
         this.elements.settingsMenu.appendChild(difficultyWrapper);
-        this.elements.settingsMenu.appendChild(saveBtn);
+        this.elements.settingsMenu.appendChild(buttonsWrapper);
         this.elements.settingsMenu.appendChild(this.elements.backButton);
         this.elements.container.appendChild(this.elements.settingsMenu);
 
 
-    },
+    }
+    ,
 
     openRulesMenu() {
         this.elements.menu.style.display = 'none';
@@ -365,7 +556,7 @@ const gemPuzzle = {
 
         const p7 = document.createElement('p');
         p7.classList.add('p7');
-        p7.textContent = '7. You can configure sound in "Sounds" menu or you can turn off sound in Main panel.';
+        p7.textContent = '7. You can turn off sound in Main panel. See volume icon.';
 
         const p8 = document.createElement('p');
         p8.classList.add('p8');
@@ -396,7 +587,16 @@ const gemPuzzle = {
         this.elements.backButton.classList.add('backButton');
         this.elements.backButton.textContent = 'Back';
         this.elements.backButton.addEventListener('click', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play();
+            }
             this.backToMenu(this.elements.rulesMenu);
+        })
+
+        this.elements.backButton.addEventListener('mouseover', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemHover.play();
+            }
         })
 
 
@@ -406,14 +606,16 @@ const gemPuzzle = {
         this.elements.container.appendChild(this.elements.rulesMenu);
 
 
-    },
+    }
+    ,
 
     backToMenu(currentMenu) {
 
         currentMenu.remove();
         this.elements.menu.style.display = 'flex';
         // this.openMenu();
-    },
+    }
+    ,
 
     openBestScoresMenu() {
 
@@ -456,18 +658,35 @@ const gemPuzzle = {
         this.elements.clearBestScoresBtn.classList.add('clearBestScoresBtn');
         this.elements.clearBestScoresBtn.textContent = `Clear all`;
         this.elements.clearBestScoresBtn.addEventListener('click', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play();
+            }
             localStorage.removeItem('bestScores');
             this.values.bestScores = [];
             this.elements.bestScoresMenu.remove();
             this.openBestScoresMenu();
-        })
+        });
+        this.elements.clearBestScoresBtn.addEventListener('mouseover', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemHover.play();
+            }
+        });
 
         this.elements.backButton = document.createElement('h3');
         this.elements.backButton.classList.add('backButton');
         this.elements.backButton.textContent = 'Back';
         this.elements.backButton.addEventListener('click', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play();
+            }
             this.backToMenu(this.elements.bestScoresMenu);
-        })
+        });
+
+        this.elements.backButton.addEventListener('mouseover', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemHover.play();
+            }
+        });
 
 
         bestScoresMenuGrid.appendChild(bestScoresMenuGridID);
@@ -523,10 +742,10 @@ const gemPuzzle = {
             this.openModal('You don\'t have any results yet')
         }
 
-    },
+    }
+    ,
 
     loadGame() {
-
         this.values.isLoad = true;
 
         // this.elements.mainArea.remove();
@@ -548,17 +767,24 @@ const gemPuzzle = {
         // dimension
         this.values.dimension = this.values.savedGames[this.values.currentScreenShotId].dimension
 
+        this.elements.mainArea.style = `grid-template-columns: repeat(${this.values.dimension}, 1fr);`
+
         this.values.isPauseClicked = false;
         this.createRandomPuzzles();
         this.initiatePuzzles();
         this.initiateDragNDrop();
         this.startGame();
-
-
         this.elements.savedGamesMenu.remove();
+
+        this.elements.audioMenu.pause();
+        this.elements.audioMenu.currentTime = 0;
+        if (this.values.isVolumeOn) {
+            this.elements.audioMainTheme.play();
+        }
 
 
         this.values.isLoad = false;
+        this.values.currentScreenShotId = 0;
     },
 
     openModal(text) {
@@ -585,9 +811,19 @@ const gemPuzzle = {
         this.elements.container.appendChild(this.elements.savedGamesMenu);
 
         noSavedGamesModalButton.addEventListener('click', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play();
+            }
             this.elements.savedGamesMenu.remove();
             this.openMenu();
-        })
+        });
+        noSavedGamesModalButton.addEventListener('mouseover', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemHover.play();
+            }
+        });
+
+
     },
 
     removeGame() {
@@ -646,6 +882,12 @@ const gemPuzzle = {
     toggleSlider(direction) {
 
         if (direction === 'right' && this.values.currentScreenShotId < this.values.savedGames.length - 1) {
+
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play()
+            }
+
+
             this.elements.screenShots[Number(this.values.currentScreenShotId)]
                 .replaceWith(this.elements.screenShots[Number(this.values.currentScreenShotId) + 1]);
             this.values.currentScreenShotId++;
@@ -659,6 +901,10 @@ const gemPuzzle = {
 
         }
         if (direction === 'left' && this.values.currentScreenShotId > 0) {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play()
+            }
+
             this.elements.screenShots[Number(this.values.currentScreenShotId)]
                 .replaceWith(this.elements.screenShots[Number(this.values.currentScreenShotId) - 1]);
             this.values.currentScreenShotId--;
@@ -674,7 +920,8 @@ const gemPuzzle = {
         this.elements.savedGamesMenuTitle.textContent =
             `Saved Games: ${this.values.currentScreenShotId + 1}/${this.values.savedGames.length}`
 
-    },
+    }
+    ,
 
 
     openSavedGamesMenu() {
@@ -751,8 +998,16 @@ const gemPuzzle = {
         this.elements.loadButton.classList.add('loadButton');
         this.elements.loadButton.textContent = `Load`;
         this.elements.loadButton.addEventListener('click', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play();
+            }
             this.loadGame();
-        })
+        });
+        this.elements.loadButton.addEventListener('mouseover', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemHover.play();
+            }
+        });
         this.elements.savedGamesMenuButtonsWrapper.appendChild(this.elements.loadButton);
 
 
@@ -760,8 +1015,16 @@ const gemPuzzle = {
         this.elements.removeButton.classList.add('removeButton');
         this.elements.removeButton.textContent = 'Remove';
         this.elements.removeButton.addEventListener('click', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play();
+            }
             this.removeGame();
-        })
+        });
+        this.elements.removeButton.addEventListener('mouseover', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemHover.play();
+            }
+        });
         this.elements.savedGamesMenuButtonsWrapper.appendChild(this.elements.removeButton);
 
 
@@ -770,8 +1033,16 @@ const gemPuzzle = {
         this.elements.backButton.classList.add('backButton');
         this.elements.backButton.textContent = 'Back';
         this.elements.backButton.addEventListener('click', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemSelect.play();
+            }
             this.backToMenu(this.elements.savedGamesMenu);
-        })
+        });
+        this.elements.backButton.addEventListener('mouseover', () => {
+            if (this.values.isVolumeOn) {
+                this.elements.audioMenuItemHover.play();
+            }
+        });
 
 
         this.elements.savedGamesMenu.appendChild(this.elements.slider);
@@ -780,7 +1051,8 @@ const gemPuzzle = {
         this.elements.container.appendChild(this.elements.savedGamesMenu);
 
 
-    },
+    }
+    ,
 
     animateSwapping(direction, shiftedElementIndex, emptyElementIndex) {
         let i = 0;
@@ -911,7 +1183,8 @@ const gemPuzzle = {
             }, 5)
         }
 
-    },
+    }
+    ,
 
 
     chooseRandomImage() {
@@ -919,12 +1192,18 @@ const gemPuzzle = {
         let max = 150;
         let randomNumber = Math.floor(min + Math.random() * (max + 1 - min));
         return randomNumber
-    },
+    }
+    ,
 
 
     checkpuzzlesIndexesOrder() {
         if (this.elements.puzzles.every((el, ind) => Number(el.id) === ind + 1)) {
+
             clearInterval(this.values.timerId);
+            this.elements.audioMainTheme.pause();
+            this.elements.audioMainTheme.currentTime = 0;
+
+
             this.elements.winMenu = document.createElement('div');
             this.elements.winMenu.classList.add('win-menu');
             const winMenuText = document.createElement('div');
@@ -1002,7 +1281,7 @@ const gemPuzzle = {
                 this.elements.winMenu.remove();
                 this.elements.audioWin.pause();
                 this.elements.audioWin.currentTime = 0;
-
+                this.elements.audioMenu.play();
 
                 // this.initiatePuzzles();
                 // this.initiateDragNDrop();
@@ -1017,7 +1296,8 @@ const gemPuzzle = {
 
             })
         }
-    },
+    }
+    ,
     initiateAudio() {
         // Move sound for swap
         this.elements.audioMove = document.createElement('audio');
@@ -1060,8 +1340,8 @@ const gemPuzzle = {
         let audioMenuItemHoverSource = document.createElement('source');
         audioMenuItemHoverSource.src = 'src/assets/sounds/Hover-menu-item.mp3';
         this.elements.audioMenuItemHover.appendChild(audioMenuItemHoverSource);
-        this.elements.audioMenuItemHover.setAttribute("autoplay", "");
-        this.elements.audioMenuItemHover.setAttribute("muted", "muted");
+        // this.elements.audioMenuItemHover.setAttribute("autoplay", "");
+        // this.elements.audioMenuItemHover.setAttribute("muted", "muted");
         document.body.appendChild(this.elements.audioMenuItemHover);
 
 
@@ -1078,6 +1358,11 @@ const gemPuzzle = {
         this.elements.audioMenu.classList.add('audioMenu');
         let audioMenuSource = document.createElement('source');
         audioMenuSource.src = 'src/assets/sounds/Menu.mp3';
+
+        if (this.values.isVolumeOn) {
+            this.elements.audioMenu.setAttribute('autoplay', '')
+        }
+
         this.elements.audioMenu.appendChild(audioMenuSource);
         this.elements.audioMenu.setAttribute("loop", "");
         document.body.appendChild(this.elements.audioMenu);
@@ -1091,12 +1376,15 @@ const gemPuzzle = {
         this.elements.audioMainTheme.classList.add('audioMainTheme');
         let audioMainThemeSource = document.createElement('source');
         audioMainThemeSource.src = `src/assets/sounds/main-theme/${randomMainThemeAudio}.mp3`;
+
+
         this.elements.audioMainTheme.appendChild(audioMainThemeSource);
         this.elements.audioMainTheme.setAttribute("loop", "");
         document.body.appendChild(this.elements.audioMainTheme);
 
 
-    },
+    }
+    ,
     initiatePuzzles() {
         for (let val of this.elements.puzzles) {
             val.addEventListener('click', () => {
@@ -1108,7 +1396,8 @@ const gemPuzzle = {
                 val.setAttribute('draggable', true);
             }
         }
-    },
+    }
+    ,
     updateTime() {
         this.values.timerId = setInterval(() => {
 
@@ -1132,12 +1421,15 @@ const gemPuzzle = {
             this.elements.time.textContent = `Time:${this.values.time}`;
         }, 1000)
     },
+
+
     startGame() {
         this.values.previousRandomImageName = this.values.randomImageName;
         this.values.randomImageName = this.chooseRandomImage()
         this.elements.menu.remove();
         this.updateTime();
     },
+
     openMenu() {
         // this.elements.pauseBtn.style.cssText = 'color:red;'
 
@@ -1147,15 +1439,14 @@ const gemPuzzle = {
 
         //Create menu elements wrapper
 
+
         //    Create menu elements
         this.elements.continueGameBtn = document.createElement("h3");
         this.elements.continueGameBtn.classList.add('continueGameBtn', 'menu-item');
         this.elements.continueGameBtn.textContent = `Continue`;
         this.elements.continueGameBtn.addEventListener('mouseover', () => {
 
-            // && this.values.isMenuItemClicked -> this validation is done for browser autoplay policy
-            // (user need to interact with domain before listen  audio)
-            if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
+            if (this.values.isVolumeOn) {
                 this.elements.audioMenuItemHover.play()
             }
 
@@ -1168,7 +1459,11 @@ const gemPuzzle = {
                 this.elements.audioMainTheme.play();
             }
             this.values.isPauseClicked = false;
-            this.startGame();
+
+            // this.startGame();
+
+            this.elements.menu.remove();
+            this.updateTime();
         })
 
         this.elements.newGameBtn = document.createElement("h3");
@@ -1177,7 +1472,8 @@ const gemPuzzle = {
         this.elements.newGameBtn.addEventListener('mouseover', () => {
             // && this.values.isPauseClicked -> this validation is done for browser autoplay policy
             // (user need to interact with domain before listen  audio)
-            if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
+            //if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
+            if (this.values.isVolumeOn) {
                 this.elements.audioMenuItemHover.play();
                 // let promise = this.elements.audioMenuItemHover.play();
                 // if (promise !== undefined) {
@@ -1245,9 +1541,7 @@ const gemPuzzle = {
         this.elements.saveGameBtn.classList.add('saveGameBtn', 'menu-item');
         this.elements.saveGameBtn.textContent = `Save Game`;
         this.elements.saveGameBtn.addEventListener('mouseover', () => {
-            // && this.values.isMenuItemClicked -> this validation is done for browser autoplay policy
-            // (user need to interact with domain before listen  audio)
-            if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
+            if (this.values.isVolumeOn) {
                 this.elements.audioMenuItemHover.play();
             }
 
@@ -1255,6 +1549,7 @@ const gemPuzzle = {
 
         this.elements.saveGameBtn.addEventListener('click', () => {
             this.values.isMenuItemClicked = true;
+
             if (this.values.isVolumeOn) {
                 this.elements.audioMenuItemSelect.play();
             }
@@ -1306,7 +1601,8 @@ const gemPuzzle = {
         this.elements.savedGamesBtn.addEventListener('mouseover', () => {
             // && this.values.isMenuItemClicked -> this validation is done for browser autoplay policy
             // (user need to interact with domain before listen  audio)
-            if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
+            //if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
+            if (this.values.isVolumeOn) {
                 this.elements.audioMenuItemHover.play();
             }
 
@@ -1326,7 +1622,8 @@ const gemPuzzle = {
         this.elements.bestScoresBtn.addEventListener('mouseover', () => {
             // && this.values.isMenuItemClicked -> this validation is done for browser autoplay policy
             // (user need to interact with domain before listen  audio)
-            if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
+            //if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
+            if (this.values.isVolumeOn) {
                 this.elements.audioMenuItemHover.play();
             }
 
@@ -1347,7 +1644,8 @@ const gemPuzzle = {
         this.elements.rulesGameBtn.addEventListener('mouseover', () => {
             // && this.values.isMenuItemClicked -> this validation is done for browser autoplay policy
             // (user need to interact with domain before listen  audio)
-            if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
+            //if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
+            if (this.values.isVolumeOn) {
                 this.elements.audioMenuItemHover.play();
             }
 
@@ -1367,7 +1665,8 @@ const gemPuzzle = {
         this.elements.settingsBtn.addEventListener('mouseover', () => {
             // && this.values.isMenuItemClicked -> this validation is done for browser autoplay policy
             // (user need to interact with domain before listen  audio)
-            if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
+            // if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
+            if (this.values.isVolumeOn) {
                 this.elements.audioMenuItemHover.play();
             }
         });
@@ -1380,25 +1679,6 @@ const gemPuzzle = {
         });
 
 
-        this.elements.soundBtn = document.createElement("h3");
-        this.elements.soundBtn.classList.add('soundBtn', 'menu-item');
-        this.elements.soundBtn.textContent = `Sound`;
-        this.elements.soundBtn.addEventListener('mouseover', () => {
-            // && this.values.isMenuItemClicked -> this validation is done for browser autoplay policy
-            // (user need to interact with domain before listen  audio)
-            if (this.values.isVolumeOn && this.values.isMenuItemClicked) {
-                this.elements.audioMenuItemHover.play();
-            }
-
-        })
-        this.elements.soundBtn.addEventListener('click', () => {
-            this.values.isMenuItemClicked = true
-            if (this.values.isVolumeOn) {
-                this.elements.audioMenuItemSelect.play();
-            }
-        })
-
-
         if (this.values.isPauseClicked) {
             this.elements.menu.appendChild(this.elements.continueGameBtn);
         }
@@ -1409,12 +1689,12 @@ const gemPuzzle = {
         this.elements.menu.appendChild(this.elements.savedGamesBtn);
         this.elements.menu.appendChild(this.elements.bestScoresBtn);
         this.elements.menu.appendChild(this.elements.rulesGameBtn);
-        this.elements.menu.appendChild(this.elements.soundBtn);
         this.elements.menu.appendChild(this.elements.settingsBtn);
 
         //  this.elements.container.appendChild(this.elements.menu);
         document.body.appendChild(this.elements.menu);
-    },
+    }
+    ,
 
 
     initiateDragNDrop() {
@@ -1449,8 +1729,7 @@ const gemPuzzle = {
                 || (currentPuzzleIndex === emptyElementIndex + 1 && isElementsInAOneRow())
                 || (currentPuzzleIndex === emptyElementIndex - 1 && isElementsInAOneRow()))
             ) {
-                // isAllowDragDrop = false;
-                isAllowDragDrop = true;
+                isAllowDragDrop = false;
             }
 
         }
@@ -1541,7 +1820,8 @@ const gemPuzzle = {
         }
 
         emptyElement.addEventListener('drop', dragDrop);
-    },
+    }
+    ,
     swapPuzzles(puzzle) {
         // find indexes of shifted and empty elements into puzzles array
         const shiftedElementIndex = this.elements.puzzles.indexOf(this.elements.puzzles.find((el) => el.id === puzzle.id));
@@ -1614,7 +1894,8 @@ const gemPuzzle = {
 
 
         }
-    },
+    }
+    ,
     createRandomPuzzles() {
         // Reset order board of puzzles
         this.elements.mainArea.innerHTML = '';
@@ -1643,6 +1924,7 @@ const gemPuzzle = {
 
         if (this.values.isLoad) {
             randomIndexes = this.values.savedGames[this.values.currentScreenShotId].puzzlesIndexesOrder
+
         }
 
         // Second cycle for clarification and visibility
@@ -1657,26 +1939,30 @@ const gemPuzzle = {
                 this.elements.puzzles[i].classList.add('puzzle');
                 this.elements.puzzles[i].id = randomIndexes[i] + 1;
 
-                //TODO
-                this.elements.puzzles[i].textContent = randomIndexes[i] + 1;
 
+                if (this.values.difficulty === 1 || this.values.difficulty === 2) {
+                    this.elements.puzzles[i].textContent = randomIndexes[i] + 1;
+                }
 
-                // Image assemble
-                this.elements.puzzles[i].style.backgroundImage = `url('src/assets/images/puzzle-images/${this.values.randomImageName}.jpg')`;
-                this.elements.puzzles[i].style.backgroundRepeat = `no-repeat`;
-                const puzzleWidth = this.elements.mainArea.clientWidth / this.values.dimension;
-                const puzzleHeight = this.elements.mainArea.clientHeight / this.values.dimension;
-                const left = puzzleWidth * (randomIndexes[i] % this.values.dimension);
-                const top = puzzleHeight * Math.floor((randomIndexes[i] / this.values.dimension));
-                this.elements.puzzles[i].style.backgroundSize = `${this.elements.mainArea.clientWidth}px ${this.elements.mainArea.clientHeight}px`;
-                this.elements.puzzles[i].style.backgroundPosition = `-${left}px -${top}px`;
+                if (this.values.difficulty === 2 || this.values.difficulty === 3) {
+                    // Image assemble
+                    this.elements.puzzles[i].style.backgroundImage = `url('src/assets/images/puzzle-images/${this.values.randomImageName}.jpg')`;
+                    this.elements.puzzles[i].style.backgroundRepeat = `no-repeat`;
+                    const puzzleWidth = this.elements.mainArea.clientWidth / this.values.dimension;
+                    const puzzleHeight = this.elements.mainArea.clientHeight / this.values.dimension;
+                    const left = puzzleWidth * (randomIndexes[i] % this.values.dimension);
+                    const top = puzzleHeight * Math.floor((randomIndexes[i] / this.values.dimension));
+                    this.elements.puzzles[i].style.backgroundSize = `${this.elements.mainArea.clientWidth}px ${this.elements.mainArea.clientHeight}px`;
+                    this.elements.puzzles[i].style.backgroundPosition = `-${left}px -${top}px`;
+                }
 
             }
             this.elements.mainArea.appendChild(this.elements.puzzles[i]);
 
 
         }
-    },
+    }
+    ,
 
     createSortedPuzzles() {
         for (let i = 0; i < this.values.dimension * this.values.dimension; i++) {
@@ -1684,25 +1970,32 @@ const gemPuzzle = {
             this.elements.puzzles[i].id = i + 1;
             if (i !== this.values.dimension * this.values.dimension - 1) {
                 this.elements.puzzles[i].classList.add('puzzle');
-                this.elements.puzzles[i].textContent = i + 1;
+
+                if (this.values.difficulty === 1 || this.values.difficulty === 2) {
+                    this.elements.puzzles[i].textContent = i + 1;
+                }
 
 
-                // Assemble of image
-                this.elements.puzzles[i].style.backgroundImage = `url('src/assets/images/puzzle-images/${this.values.randomImageName}.jpg')`;
-                this.elements.puzzles[i].style.backgroundRepeat = `no-repeat`;
-                const puzzleWidth = this.elements.mainArea.clientWidth / this.values.dimension;
-                const puzzleHeight = this.elements.mainArea.clientHeight / this.values.dimension;
-                const left = puzzleWidth * (i % this.values.dimension);
-                const top = puzzleHeight * Math.floor((i / this.values.dimension));
-                // this.elements.puzzles[i].style.backgroundSize = `${this.elements.mainArea.clientWidth}px ${this.elements.mainArea.clientHeight}px`;
-                this.elements.puzzles[i].style.backgroundPosition = `-${left}px -${top}px`;
+                if (this.values.difficulty === 2 || this.values.difficulty === 3) {
+                    // Assemble of image
+                    this.elements.puzzles[i].style.backgroundImage = `url('src/assets/images/puzzle-images/${this.values.randomImageName}.jpg')`;
+                    this.elements.puzzles[i].style.backgroundRepeat = `no-repeat`;
+                    const puzzleWidth = this.elements.mainArea.clientWidth / this.values.dimension;
+                    const puzzleHeight = this.elements.mainArea.clientHeight / this.values.dimension;
+                    const left = puzzleWidth * (i % this.values.dimension);
+                    const top = puzzleHeight * Math.floor((i / this.values.dimension));
+                    this.elements.puzzles[i].style.backgroundSize = `${this.elements.mainArea.clientWidth}px ${this.elements.mainArea.clientHeight}px`;
+                    this.elements.puzzles[i].style.backgroundPosition = `-${left}px -${top}px`;
+                }
+
 
             } else {
                 this.elements.puzzles[i].classList.add('empty');
             }
             this.elements.mainArea.appendChild(this.elements.puzzles[i]);
         }
-    },
+    }
+    ,
 
 }
 
