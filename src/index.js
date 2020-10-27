@@ -562,13 +562,13 @@ const gemPuzzle = {
         p8.classList.add('p8');
         p8.textContent = '8. If you choose "Only picture" mode  you can click on "Question" icon in Main panel and see full image which you need to have.';
 
-        const p9 = document.createElement('p');
-        p9.classList.add('p9');
-        p9.textContent = '9. If you don\'t know how to place puzzles in order -  You can "Finish" game and see how puzzles move to their positions with animation.';
+        // const p9 = document.createElement('p');
+        // p9.classList.add('p9');
+        // p9.textContent = '9. If you don\'t know how to place puzzles in order -  You can "Finish" game and see how puzzles move to their positions with animation.';
 
         const p10 = document.createElement('p');
         p10.classList.add('p10');
-        p10.textContent = '10. If you win you can see congratulations text and listen enjoyable melody.';
+        p10.textContent = '9. If you win you can see congratulations text and listen enjoyable melody.';
 
 
         content.appendChild(mainText);
@@ -580,7 +580,7 @@ const gemPuzzle = {
         content.appendChild(p6);
         content.appendChild(p7);
         content.appendChild(p8);
-        content.appendChild(p9);
+        // content.appendChild(p9);
         content.appendChild(p10);
 
         this.elements.backButton = document.createElement('h3');
@@ -748,6 +748,7 @@ const gemPuzzle = {
     loadGame() {
         this.values.isLoad = true;
 
+        this.values.difficulty=this.values.savedGames[this.values.currentScreenShotId].mode
         // this.elements.mainArea.remove();
 
         // Update time
@@ -926,14 +927,18 @@ const gemPuzzle = {
 
     openSavedGamesMenu() {
 
+        this.values.currentScreenShotId = 0;
+
         this.values.savedGames = JSON.parse(localStorage.getItem('savedGames'))
+
+        if (!this.values.savedGames) {
+            this.values.savedGames = [];
+        }
 
 
         // Modal window appears if no existing saved games
         if (!this.values.savedGames.length) {
-
             this.openModal(`You don't have any saved games`)
-
             return
         }
 
@@ -1281,7 +1286,12 @@ const gemPuzzle = {
                 this.elements.winMenu.remove();
                 this.elements.audioWin.pause();
                 this.elements.audioWin.currentTime = 0;
-                this.elements.audioMenu.play();
+                if (this.values.isVolumeOn) {
+                    this.elements.audioMenu.play();
+                }
+
+
+                //TODO
 
                 // this.initiatePuzzles();
                 // this.initiateDragNDrop();
@@ -1292,7 +1302,6 @@ const gemPuzzle = {
                 this.elements.time.textContent = `Time:${this.values.time}`
                 this.values.moves = 0;
                 this.elements.moves.textContent = `Moves: ${this.values.moves}`
-
 
             })
         }
@@ -1577,7 +1586,8 @@ const gemPuzzle = {
                         screenShot: this.elements.screenShot.innerHTML,
                         puzzlesIndexesOrder: puzzlesIndexesOrder,
                         dimension: this.values.dimension,
-                        backgroundImageName: this.values.previousRandomImageName
+                        backgroundImageName: this.values.previousRandomImageName,
+                        mode: this.values.difficulty
                     }
                 ];
 
@@ -1711,16 +1721,16 @@ const gemPuzzle = {
 
 
             const isElementsInAOneRow = () => {
-                const shiftedElementRowNumber = Math.floor(currentPuzzleIndex / 4) + 1;
-                const emptyElementRowNumber = Math.floor(emptyElementIndex / 4) + 1;
+                const shiftedElementRowNumber = Math.floor(currentPuzzleIndex / gemPuzzle.values.dimension) + 1;
+                const emptyElementRowNumber = Math.floor(emptyElementIndex / gemPuzzle.values.dimension) + 1;
                 if (shiftedElementRowNumber === emptyElementRowNumber) {
                     return true
                 }
                 return false
             }
 
-            if (!(currentPuzzleIndex === emptyElementIndex + 4
-                || currentPuzzleIndex === emptyElementIndex - 4
+            if (!(currentPuzzleIndex === emptyElementIndex + gemPuzzle.values.dimension
+                || currentPuzzleIndex === emptyElementIndex - gemPuzzle.values.dimension
                 || (currentPuzzleIndex === emptyElementIndex + 1 && isElementsInAOneRow())
                 || (currentPuzzleIndex === emptyElementIndex - 1 && isElementsInAOneRow()))
             ) {
