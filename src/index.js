@@ -88,7 +88,7 @@ const gemPuzzle = {
         savedGames: [],
         bestScores: [],
         currentScreenShotId: 0,
-        difficulty: 3,
+        difficulty: 2,
     },
 
     init() {
@@ -272,7 +272,7 @@ const gemPuzzle = {
 
         this.values.dimension = 4;
         this.values.isAnimation = true;
-        this.values.difficulty = 3;
+        this.values.difficulty = 2;
         this.elements.settingsMenu.remove();
         this.openSettingsMenu();
         this.saveSettings();
